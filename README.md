@@ -140,6 +140,4 @@ Aktualisiere die Links in den Komponenten:
 
 ## 🤝 Support
 
-Bei Fragen oder Problemen, kontaktiere uns:
-- Email: info@zooflora.de
-- Website: https://zooflora.de
+Bei Fragen oder Problemen, kontaktiere www.markusgotzmann.de
