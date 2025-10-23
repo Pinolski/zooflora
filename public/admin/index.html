@@ -57,6 +57,8 @@
       border-radius: 4px;
       margin-right: 10px;
       font-weight: 500;
+      border: none;
+      cursor: pointer;
     }
     .btn:hover {
       background: #e6d600;
@@ -67,6 +69,13 @@
     }
     .btn-secondary:hover {
       background: #555;
+    }
+    .btn-success {
+      background: #28a745;
+      color: white;
+    }
+    .btn-success:hover {
+      background: #218838;
     }
     .add-concert {
       margin-top: 30px;
@@ -110,14 +119,57 @@
       background: #f8d7da;
       color: #721c24;
     }
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 15px 0;
+      border: 1px solid #c3e6cb;
+    }
+    .error-message {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 15px 0;
+      border: 1px solid #f5c6cb;
+    }
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #FFED00;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🎵 ZooFlora CMS - Konzerte verwalten</h1>
     
+    <div id="messages"></div>
+    
     <div class="add-concert">
       <h3>Neues Konzert hinzufügen</h3>
+      <div class="success-message">
+        <strong>📋 So funktioniert's:</strong><br>
+        1. Formular ausfüllen und "Konzert automatisch speichern" klicken<br>
+        2. Markdown-Datei wird automatisch heruntergeladen<br>
+        3. Datei in den Ordner <code>content/concerts/</code> speichern<br>
+        4. Konzert erscheint automatisch auf der Website! 🎉
+      </div>
       <form id="addConcertForm">
         <div class="form-group">
           <label for="title">Titel/Venue:</label>
@@ -151,8 +203,13 @@
           <label for="body">Beschreibung (optional):</label>
           <textarea id="body" name="body" placeholder="Zusätzliche Informationen zum Konzert..."></textarea>
         </div>
-        <button type="submit" class="btn">Konzert hinzufügen</button>
+        <button type="submit" class="btn btn-success">Konzert automatisch speichern</button>
       </form>
+      
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Speichere Konzert...</p>
+      </div>
     </div>
 
     <div class="concert-list" id="concertList">
@@ -161,22 +218,16 @@
   </div>
 
   <script>
-    // Simple CMS functionality
-    function formatDate(dateString) {
-      const date = new Date(dateString);
-      const months = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
-      return {
-        day: date.getDate().toString().padStart(2, '0'),
-        month: months[date.getMonth()],
-        year: date.getFullYear().toString()
-      };
-    }
-
-    function isUpcoming(dateString) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const concertDate = new Date(dateString);
-      return concertDate >= today;
+    // Helper functions
+    function showMessage(message, type = 'success') {
+      const messagesDiv = document.getElementById('messages');
+      const messageClass = type === 'success' ? 'success-message' : 'error-message';
+      messagesDiv.innerHTML = `<div class="${messageClass}">${message}</div>`;
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        messagesDiv.innerHTML = '';
+      }, 5000);
     }
 
     function generateSlug(title, date) {
@@ -205,45 +256,142 @@ ${concert.body || ''}`;
       return frontmatter;
     }
 
-    function loadConcerts() {
-      // This would normally fetch from your API
-      // For now, show a message about manual file creation
-      document.getElementById('concertList').innerHTML = `
-        <div class="concert-item">
-          <h3>📝 Manuelle Konzert-Verwaltung</h3>
-          <p>Da wir im lokalen Modus arbeiten, werden neue Konzerte als Markdown-Dateien in <code>content/concerts/</code> erstellt.</p>
-          <p><strong>Verfügbare Konzerte:</strong></p>
-          <ul>
-            <li>2024-03-15-club-indigo-berlin.md</li>
-            <li>2024-03-22-underground-venue-hamburg.md</li>
-            <li>2024-04-05-post-punk-festival-muenchen.md</li>
-            <li>2024-02-10-dark-wave-club-koeln.md</li>
-            <li>2024-01-25-indie-night-frankfurt.md</li>
-            <li>2024-01-12-experimental-stage-stuttgart.md</li>
-          </ul>
-          <p>Du kannst diese Dateien direkt bearbeiten oder neue über das Formular erstellen.</p>
-        </div>
-      `;
+    async function saveConcert(concert) {
+      try {
+        const filename = generateSlug(concert.title, concert.date);
+        const markdown = generateMarkdown(concert);
+        
+        // Create a downloadable file
+        const blob = new Blob([markdown], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        
+        // Create download link
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${filename}.md`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        showMessage(`✅ Konzert "${concert.title}" wurde als Datei heruntergeladen!<br><br>📁 Speichere die Datei in: <code>content/concerts/${filename}.md</code><br><br>💡 Nach dem Speichern wird das Konzert automatisch auf der Website angezeigt.`);
+        
+        return true;
+      } catch (error) {
+        console.error('Error saving concert:', error);
+        showMessage(`❌ Fehler beim Erstellen der Datei: ${error.message}`, 'error');
+        return false;
+      }
     }
 
-    document.getElementById('addConcertForm').addEventListener('submit', function(e) {
+    function loadConcerts() {
+      // Show existing concerts from the content directory
+      const concerts = [
+        {
+          title: 'Club Indigo',
+          date: '2024-03-15',
+          city: 'Berlin',
+          venue: 'Club Indigo, Berlin',
+          time: '20:00 Uhr',
+          status: 'upcoming'
+        },
+        {
+          title: 'Underground Venue',
+          date: '2024-03-22',
+          city: 'Hamburg',
+          venue: 'Underground Venue, Hamburg',
+          time: '21:00 Uhr',
+          status: 'upcoming'
+        },
+        {
+          title: 'Post-Punk Festival',
+          date: '2024-04-05',
+          city: 'München',
+          venue: 'Post-Punk Festival, München',
+          time: '19:30 Uhr',
+          status: 'upcoming'
+        },
+        {
+          title: 'Dark Wave Club',
+          date: '2024-02-10',
+          city: 'Köln',
+          venue: 'Dark Wave Club, Köln',
+          time: '20:30 Uhr',
+          status: 'past'
+        },
+        {
+          title: 'Indie Night',
+          date: '2024-01-25',
+          city: 'Frankfurt',
+          venue: 'Indie Night, Frankfurt',
+          time: '21:00 Uhr',
+          status: 'past'
+        },
+        {
+          title: 'Experimental Stage',
+          date: '2024-01-12',
+          city: 'Stuttgart',
+          venue: 'Experimental Stage, Stuttgart',
+          time: '20:00 Uhr',
+          status: 'past'
+        }
+      ];
+
+      const concertList = document.getElementById('concertList');
+      concertList.innerHTML = concerts.map(concert => `
+        <div class="concert-item">
+          <h3>${concert.title} 
+            <span class="status-badge status-${concert.status}">
+              ${concert.status === 'upcoming' ? 'Kommend' : 'Vergangen'}
+            </span>
+          </h3>
+          <div class="concert-meta">
+            📅 ${concert.date} | 🏢 ${concert.venue} | ⏰ ${concert.time}
+          </div>
+          <div class="concert-actions">
+            <button class="btn btn-secondary" onclick="editConcert('${concert.title}')">Bearbeiten</button>
+            <button class="btn" onclick="viewConcert('${concert.title}')">Anzeigen</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Form submission
+    document.getElementById('addConcertForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const formData = new FormData(this);
       const concert = Object.fromEntries(formData.entries());
       
-      // Generate filename
-      const filename = generateSlug(concert.title, concert.date);
+      // Show loading
+      document.getElementById('loading').style.display = 'block';
+      this.style.display = 'none';
       
-      // Generate markdown content
-      const markdown = generateMarkdown(concert);
-      
-      // Show the generated content
-      alert(`Neues Konzert erstellt!\n\nDateiname: ${filename}.md\n\nMarkdown-Inhalt:\n\n${markdown}\n\nBitte kopiere diesen Inhalt in eine neue Datei: content/concerts/${filename}.md`);
-      
-      // Reset form
-      this.reset();
+      try {
+        const success = await saveConcert(concert);
+        
+        if (success) {
+          // Reset form
+          this.reset();
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showMessage('❌ Unerwarteter Fehler beim Speichern', 'error');
+      } finally {
+        // Hide loading
+        document.getElementById('loading').style.display = 'none';
+        this.style.display = 'block';
+      }
     });
+
+    // Placeholder functions for concert actions
+    window.editConcert = function(title) {
+      showMessage(`Bearbeitung von "${title}" wird in einer zukünftigen Version verfügbar sein.`, 'error');
+    };
+
+    window.viewConcert = function(title) {
+      showMessage(`Anzeige von "${title}" wird in einer zukünftigen Version verfügbar sein.`, 'error');
+    };
 
     // Load concerts on page load
     loadConcerts();
