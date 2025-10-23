@@ -256,7 +256,7 @@ ${concert.body || ''}`;
       return frontmatter;
     }
 
-    async function saveConcert(concert) {
+    function saveConcert(concert) {
       try {
         const filename = generateSlug(concert.title, concert.date);
         const markdown = generateMarkdown(concert);
@@ -357,7 +357,7 @@ ${concert.body || ''}`;
     }
 
     // Form submission
-    document.getElementById('addConcertForm').addEventListener('submit', async function(e) {
+    document.getElementById('addConcertForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
       const formData = new FormData(this);
@@ -368,7 +368,7 @@ ${concert.body || ''}`;
       this.style.display = 'none';
       
       try {
-        const success = await saveConcert(concert);
+        const success = saveConcert(concert);
         
         if (success) {
           // Reset form
