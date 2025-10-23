@@ -104,122 +104,51 @@
 </template>
 
 <script setup>
-import { onMounted, computed } from 'vue'
+import { onMounted } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// Load concerts - simplified approach
-const concerts = ref([
+// Static shows data with correct date logic
+const upcomingShows = [
+  // Future concert (2025) - from your content file
   {
-    _id: '1',
-    title: 'Club Indigo',
-    date: '2024-03-15',
-    city: 'Berlin',
-    venue: 'Club Indigo, Berlin',
+    id: '20251028-sdcsdcsdc',
+    date: { day: '28', month: 'Okt', year: '2025' },
+    venue: 'sdcsdcsdc',
+    location: 'sdsdcsdc, Deutschland',
     time: '20:00 Uhr',
-    ticket_url: 'https://example.com/tickets',
-    published: true
-  },
-  {
-    _id: '2',
-    title: 'Underground Venue',
-    date: '2024-03-22',
-    city: 'Hamburg',
-    venue: 'Underground Venue, Hamburg',
-    time: '21:00 Uhr',
-    ticket_url: 'https://example.com/tickets',
-    published: true
-  },
-  {
-    _id: '3',
-    title: 'Post-Punk Festival',
-    date: '2024-04-05',
-    city: 'München',
-    venue: 'Post-Punk Festival, München',
-    time: '19:30 Uhr',
-    ticket_url: 'https://example.com/tickets',
-    published: true
-  },
-  {
-    _id: '4',
-    title: 'Dark Wave Club',
-    date: '2024-02-10',
-    city: 'Köln',
-    venue: 'Dark Wave Club, Köln',
-    time: '20:30 Uhr',
-    photos_url: 'https://example.com/photos',
-    published: true
-  },
-  {
-    _id: '5',
-    title: 'Indie Night',
-    date: '2024-01-25',
-    city: 'Frankfurt',
-    venue: 'Indie Night, Frankfurt',
-    time: '21:00 Uhr',
-    photos_url: 'https://example.com/photos',
-    published: true
-  },
-  {
-    _id: '6',
-    title: 'Experimental Stage',
-    date: '2024-01-12',
-    city: 'Stuttgart',
-    venue: 'Experimental Stage, Stuttgart',
-    time: '20:00 Uhr',
-    photos_url: 'https://example.com/photos',
-    published: true
+    ticketLink: 'https://www.instagram.com/p/DP_EZSjDK5D/'
   }
-])
+]
 
-// Helper function to format date
-const formatDate = (dateString) => {
-  const date = new Date(dateString)
-  const months = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
-  
-  return {
-    day: date.getDate().toString().padStart(2, '0'),
-    month: months[date.getMonth()],
-    year: date.getFullYear().toString()
-  }
-}
-
-// Helper function to format location
-const formatLocation = (city, venue) => {
-  return `${city}, Deutschland`
-}
-
-// Static shows data - guaranteed to work
-const upcomingShows = ref([
+const pastShows = [
+  // Past concerts (2024)
   {
-    id: 1,
+    id: '1',
     date: { day: '15', month: 'Mär', year: '2024' },
     venue: 'Club Indigo',
     location: 'Berlin, Deutschland',
     time: '20:00 Uhr',
-    ticketLink: 'https://example.com/tickets'
+    photosLink: 'https://example.com/photos'
   },
   {
-    id: 2,
+    id: '2',
     date: { day: '22', month: 'Mär', year: '2024' },
     venue: 'Underground Venue',
     location: 'Hamburg, Deutschland',
     time: '21:00 Uhr',
-    ticketLink: 'https://example.com/tickets'
+    photosLink: 'https://example.com/photos'
   },
   {
-    id: 3,
+    id: '3',
     date: { day: '05', month: 'Apr', year: '2024' },
     venue: 'Post-Punk Festival',
     location: 'München, Deutschland',
     time: '19:30 Uhr',
-    ticketLink: 'https://example.com/tickets'
-  }
-])
-
-const pastShows = ref([
+    photosLink: 'https://example.com/photos'
+  },
   {
-    id: 4,
+    id: '4',
     date: { day: '10', month: 'Feb', year: '2024' },
     venue: 'Dark Wave Club',
     location: 'Köln, Deutschland',
@@ -227,7 +156,7 @@ const pastShows = ref([
     photosLink: 'https://example.com/photos'
   },
   {
-    id: 5,
+    id: '5',
     date: { day: '25', month: 'Jan', year: '2024' },
     venue: 'Indie Night',
     location: 'Frankfurt, Deutschland',
@@ -235,18 +164,14 @@ const pastShows = ref([
     photosLink: 'https://example.com/photos'
   },
   {
-    id: 6,
+    id: '6',
     date: { day: '12', month: 'Jan', year: '2024' },
     venue: 'Experimental Stage',
     location: 'Stuttgart, Deutschland',
     time: '20:00 Uhr',
     photosLink: 'https://example.com/photos'
   }
-])
-
-// Debug: Log the shows
-console.log('Upcoming shows:', upcomingShows.value)
-console.log('Past shows:', pastShows.value)
+]
 
 onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)
@@ -322,7 +247,6 @@ onMounted(() => {
   padding-bottom: 4rem;
 }
 
-
 .section-header {
   text-align: center;
   margin-bottom: 4rem;
@@ -336,7 +260,6 @@ onMounted(() => {
   margin-bottom: 1rem;
   position: relative;
 }
-
 
 .section-subtitle {
   font-size: 1.2rem;
@@ -370,7 +293,6 @@ onMounted(() => {
 .timeline-title.past {
   color: #666666;
 }
-
 
 .timeline-events {
   display: flex;
