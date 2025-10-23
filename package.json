@@ -1,0 +1,27 @@
+{
+  "name": "zooflora-website",
+  "version": "1.0.0",
+  "description": "Modern Indie/Post-Punk Band Website for ZooFlora",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "nuxt": "^3.8.0"
+  },
+  "dependencies": {
+    "@nuxtjs/google-fonts": "^3.0.2",
+    "@pinia/nuxt": "^0.5.1",
+    "gsap": "^3.13.0",
+    "nuxt-gtag": "^3.0.0",
+    "pinia": "^2.1.7",
+    "postprocessing": "^6.37.8",
+    "three": "^0.180.0",
+    "vue": "latest"
+  }
+}
