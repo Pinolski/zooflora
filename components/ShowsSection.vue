@@ -123,7 +123,16 @@ onMounted(async () => {
     concerts.value = result || []
   } catch (error) {
     console.error('❌ Error loading concerts from content:', error)
-    concerts.value = []
+    // Fallback: Load from API
+    try {
+      const response = await fetch('/api/concerts')
+      const data = await response.json()
+      console.log('🎵 Loaded concerts from API:', data)
+      concerts.value = data || []
+    } catch (apiError) {
+      console.error('❌ Error loading concerts from API:', apiError)
+      concerts.value = []
+    }
   }
   
   // Force reactivity update
