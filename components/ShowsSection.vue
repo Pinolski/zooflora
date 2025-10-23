@@ -108,9 +108,18 @@ import { onMounted } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// Static shows data with your new concert
+// Static shows data with all your concerts
 const upcomingShows = ref([
-  // Your new concert (2025-10-29)
+  // Your newest concert (2025-11-01)
+  {
+    id: '20251101-test-venue-ber-den-wolken-2025-yeah',
+    date: { day: '01', month: 'Nov', year: '2025' },
+    venue: 'Test Venue über den Wolken 2025 YEAH',
+    location: 'Bielefeld, Deutschland',
+    time: '23:00 Uhr',
+    ticketLink: 'https://www.loremipsum.de/'
+  },
+  // Your other future concerts (2025-10-29)
   {
     id: '20251029-test-venue-ber-den-wolken',
     date: { day: '29', month: 'Okt', year: '2025' },
