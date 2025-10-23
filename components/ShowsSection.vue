@@ -104,63 +104,71 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-const upcomingShows = [
-  {
-    id: 1,
-    date: { day: '15', month: 'Mär', year: '2024' },
-    venue: 'Club Indigo',
-    location: 'Berlin, Deutschland',
-    time: '20:00 Uhr',
-    ticketLink: 'https://example.com/tickets'
-  },
-  {
-    id: 2,
-    date: { day: '22', month: 'Mär', year: '2024' },
-    venue: 'Underground Venue',
-    location: 'Hamburg, Deutschland',
-    time: '21:00 Uhr',
-    ticketLink: 'https://example.com/tickets'
-  },
-  {
-    id: 3,
-    date: { day: '05', month: 'Apr', year: '2024' },
-    venue: 'Post-Punk Festival',
-    location: 'München, Deutschland',
-    time: '19:30 Uhr',
-    ticketLink: 'https://example.com/tickets'
-  }
-]
+// Load concerts from content
+const { data: concerts } = await queryContent('concerts')
+  .where({ published: true })
+  .sort({ date: -1 })
+  .find()
 
-const pastShows = [
-  {
-    id: 4,
-    date: { day: '10', month: 'Feb', year: '2024' },
-    venue: 'Dark Wave Club',
-    location: 'Köln, Deutschland',
-    time: '20:30 Uhr',
-    photosLink: 'https://example.com/photos'
-  },
-  {
-    id: 5,
-    date: { day: '25', month: 'Jan', year: '2024' },
-    venue: 'Indie Night',
-    location: 'Frankfurt, Deutschland',
-    time: '21:00 Uhr',
-    photosLink: 'https://example.com/photos'
-  },
-  {
-    id: 6,
-    date: { day: '12', month: 'Jan', year: '2024' },
-    venue: 'Experimental Stage',
-    location: 'Stuttgart, Deutschland',
-    time: '20:00 Uhr',
-    photosLink: 'https://example.com/photos'
+// Helper function to format date
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  const months = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']
+  
+  return {
+    day: date.getDate().toString().padStart(2, '0'),
+    month: months[date.getMonth()],
+    year: date.getFullYear().toString()
   }
-]
+}
+
+// Helper function to format location
+const formatLocation = (city, venue) => {
+  return `${city}, Deutschland`
+}
+
+// Computed properties for upcoming and past shows
+const upcomingShows = computed(() => {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  
+  return concerts.value
+    .filter(show => {
+      const showDate = new Date(show.date)
+      return showDate >= today
+    })
+    .map(show => ({
+      id: show._id,
+      date: formatDate(show.date),
+      venue: show.title,
+      location: formatLocation(show.city, show.venue),
+      time: show.time,
+      ticketLink: show.ticket_url || '#'
+    }))
+})
+
+const pastShows = computed(() => {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  
+  return concerts.value
+    .filter(show => {
+      const showDate = new Date(show.date)
+      return showDate < today
+    })
+    .map(show => ({
+      id: show._id,
+      date: formatDate(show.date),
+      venue: show.title,
+      location: formatLocation(show.city, show.venue),
+      time: show.time,
+      photosLink: show.photos_url || '#'
+    }))
+})
 
 onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)

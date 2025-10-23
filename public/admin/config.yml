@@ -1,0 +1,26 @@
+local_backend: true
+backend:
+  name: git-gateway
+  branch: main
+  repo: Pinolski/zooflora
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: concerts
+    label: Konzerte
+    folder: content/concerts
+    create: true
+    format: frontmatter
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: Titel, name: title, widget: string, hint: "Name des Venues/Locations" }
+      - { label: Datum, name: date, widget: date, format: "YYYY-MM-DD" }
+      - { label: Stadt, name: city, widget: string }
+      - { label: Venue, name: venue, widget: string, hint: "Detaillierte Location-Beschreibung" }
+      - { label: Uhrzeit, name: time, widget: string, hint: "z.B. 20:00 Uhr" }
+      - { label: Ticket URL, name: ticket_url, widget: string, required: false, hint: "Link zu Tickets (optional)" }
+      - { label: Fotos URL, name: photos_url, widget: string, required: false, hint: "Link zu Fotos (optional)" }
+      - { label: Veröffentlicht, name: published, widget: boolean, default: true }
+      - { label: Beschreibung, name: body, widget: markdown, required: false, hint: "Zusätzliche Informationen zum Konzert" }

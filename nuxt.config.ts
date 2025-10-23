@@ -1,10 +1,6 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: [
-    '@pinia/nuxt',
-    '@nuxtjs/google-fonts',
-    'nuxt-gtag'
-  ],
+  modules: ['@pinia/nuxt', '@nuxtjs/google-fonts', 'nuxt-gtag', '@nuxt/content'],
   ssr: true,
   css: ['~/assets/css/main.css'],
   app: {
