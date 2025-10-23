@@ -7,10 +7,19 @@
   <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
 </head>
 <body>
+  <div id="nc-root"></div>
   <script>
-    CMS.init({
-      config: {
-        load_config_file: true
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof CMS !== 'undefined') {
+        CMS.init({
+          config: {
+            load_config_file: true
+          }
+        });
+      } else {
+        console.error('Decap CMS not loaded');
+        document.getElementById('nc-root').innerHTML = '<p>Loading CMS...</p>';
       }
     });
   </script>
