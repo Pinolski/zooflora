@@ -109,56 +109,25 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 // Load concerts automatically from content files
-const concerts = ref([
-  {
-    _id: '20251101-test-venue-ber-den-wolken-2025-yeah',
-    title: 'Test Venue über den Wolken 2025 YEAH',
-    date: '2025-11-01',
-    city: 'Bielefeld',
-    venue: 'ndüsmümdüsmnünsüd',
-    time: '23:00 Uhr',
-    ticket_url: 'https://www.loremipsum.de/',
-    published: true
-  },
-  {
-    _id: '20251029-test-venue-ber-den-wolken',
-    title: 'Test Venue über den Wolken',
-    date: '2025-10-29',
-    city: 'Köln',
-    venue: 'Das ist ein Test. ob wir den benötigen?',
-    time: '20:00 Uhr',
-    ticket_url: 'https://www.instagram.com/purehonestmusic_/',
-    photos_url: 'https://www.instagram.com/',
-    published: true
-  },
-  {
-    _id: '20251028-sdcsdcsdc',
-    title: 'sdcsdcsdc',
-    date: '2025-10-28',
-    city: 'sdsdcsdc',
-    venue: 'sdcsdcsdc',
-    time: '20:00 Uhr',
-    ticket_url: 'https://www.instagram.com/p/DP_EZSjDK5D/',
-    published: true
-  }
-])
+const concerts = ref([])
 
 // Load concerts on component mount
 onMounted(async () => {
   try {
-    // Try to load from content system
+    // Load from content system
     const result = await queryContent('concerts')
       .where({ published: true })
       .sort({ date: -1 })
       .find()
     console.log('🎵 Loaded concerts from content:', result)
-    if (result && result.length > 0) {
-      concerts.value = result
-    }
+    concerts.value = result || []
   } catch (error) {
     console.error('❌ Error loading concerts from content:', error)
-    // Keep static data as fallback
+    concerts.value = []
   }
+  
+  // Force reactivity update
+  await nextTick()
   
   // Initialize GSAP after content is loaded
   gsap.registerPlugin(ScrollTrigger)
