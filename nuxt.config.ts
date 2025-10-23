@@ -1,6 +1,18 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@pinia/nuxt', '@nuxtjs/google-fonts', 'nuxt-gtag', '@nuxt/content'],
+  content: {
+    // Disable database for now to avoid TTY issues
+    database: false,
+    // Use file-based content instead
+    sources: {
+      content: {
+        driver: 'fs',
+        prefix: '/',
+        base: './content'
+      }
+    }
+  },
   ssr: true,
   css: ['~/assets/css/main.css'],
   app: {
