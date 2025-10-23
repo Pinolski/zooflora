@@ -213,7 +213,61 @@
     </div>
 
     <div class="concert-list" id="concertList">
-      <p>Lade Konzerte...</p>
+      <h3>📅 Bestehende Konzerte</h3>
+      <div class="concert-item">
+        <h3>Test Venue über den Wolken <span class="status-badge status-upcoming">Kommend</span></h3>
+        <div class="concert-meta">
+          📅 2025-10-29 | 🏢 Köln | ⏰ 20:00 Uhr
+        </div>
+        <div class="concert-actions">
+          <button class="btn btn-secondary" onclick="editConcert('Test Venue über den Wolken')">Bearbeiten</button>
+          <button class="btn" onclick="viewConcert('Test Venue über den Wolken')">Anzeigen</button>
+        </div>
+      </div>
+      
+      <div class="concert-item">
+        <h3>sdcsdcsdc <span class="status-badge status-upcoming">Kommend</span></h3>
+        <div class="concert-meta">
+          📅 2025-10-28 | 🏢 sdsdcsdc | ⏰ 20:00 Uhr
+        </div>
+        <div class="concert-actions">
+          <button class="btn btn-secondary" onclick="editConcert('sdcsdcsdc')">Bearbeiten</button>
+          <button class="btn" onclick="viewConcert('sdcsdcsdc')">Anzeigen</button>
+        </div>
+      </div>
+      
+      <div class="concert-item">
+        <h3>Club Indigo <span class="status-badge status-past">Vergangen</span></h3>
+        <div class="concert-meta">
+          📅 2024-03-15 | 🏢 Berlin | ⏰ 20:00 Uhr
+        </div>
+        <div class="concert-actions">
+          <button class="btn btn-secondary" onclick="editConcert('Club Indigo')">Bearbeiten</button>
+          <button class="btn" onclick="viewConcert('Club Indigo')">Anzeigen</button>
+        </div>
+      </div>
+      
+      <div class="concert-item">
+        <h3>Underground Venue <span class="status-badge status-past">Vergangen</span></h3>
+        <div class="concert-meta">
+          📅 2024-03-22 | 🏢 Hamburg | ⏰ 21:00 Uhr
+        </div>
+        <div class="concert-actions">
+          <button class="btn btn-secondary" onclick="editConcert('Underground Venue')">Bearbeiten</button>
+          <button class="btn" onclick="viewConcert('Underground Venue')">Anzeigen</button>
+        </div>
+      </div>
+      
+      <div class="concert-item">
+        <h3>Post-Punk Festival <span class="status-badge status-past">Vergangen</span></h3>
+        <div class="concert-meta">
+          📅 2024-04-05 | 🏢 München | ⏰ 19:30 Uhr
+        </div>
+        <div class="concert-actions">
+          <button class="btn btn-secondary" onclick="editConcert('Post-Punk Festival')">Bearbeiten</button>
+          <button class="btn" onclick="viewConcert('Post-Punk Festival')">Anzeigen</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -284,78 +338,6 @@ ${concert.body || ''}`;
       }
     }
 
-    function loadConcerts() {
-      // Show existing concerts from the content directory
-      const concerts = [
-        {
-          title: 'Club Indigo',
-          date: '2024-03-15',
-          city: 'Berlin',
-          venue: 'Club Indigo, Berlin',
-          time: '20:00 Uhr',
-          status: 'upcoming'
-        },
-        {
-          title: 'Underground Venue',
-          date: '2024-03-22',
-          city: 'Hamburg',
-          venue: 'Underground Venue, Hamburg',
-          time: '21:00 Uhr',
-          status: 'upcoming'
-        },
-        {
-          title: 'Post-Punk Festival',
-          date: '2024-04-05',
-          city: 'München',
-          venue: 'Post-Punk Festival, München',
-          time: '19:30 Uhr',
-          status: 'upcoming'
-        },
-        {
-          title: 'Dark Wave Club',
-          date: '2024-02-10',
-          city: 'Köln',
-          venue: 'Dark Wave Club, Köln',
-          time: '20:30 Uhr',
-          status: 'past'
-        },
-        {
-          title: 'Indie Night',
-          date: '2024-01-25',
-          city: 'Frankfurt',
-          venue: 'Indie Night, Frankfurt',
-          time: '21:00 Uhr',
-          status: 'past'
-        },
-        {
-          title: 'Experimental Stage',
-          date: '2024-01-12',
-          city: 'Stuttgart',
-          venue: 'Experimental Stage, Stuttgart',
-          time: '20:00 Uhr',
-          status: 'past'
-        }
-      ];
-
-      const concertList = document.getElementById('concertList');
-      concertList.innerHTML = concerts.map(concert => `
-        <div class="concert-item">
-          <h3>${concert.title} 
-            <span class="status-badge status-${concert.status}">
-              ${concert.status === 'upcoming' ? 'Kommend' : 'Vergangen'}
-            </span>
-          </h3>
-          <div class="concert-meta">
-            📅 ${concert.date} | 🏢 ${concert.venue} | ⏰ ${concert.time}
-          </div>
-          <div class="concert-actions">
-            <button class="btn btn-secondary" onclick="editConcert('${concert.title}')">Bearbeiten</button>
-            <button class="btn" onclick="viewConcert('${concert.title}')">Anzeigen</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
     // Form submission
     document.getElementById('addConcertForm').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -392,9 +374,6 @@ ${concert.body || ''}`;
     window.viewConcert = function(title) {
       showMessage(`Anzeige von "${title}" wird in einer zukünftigen Version verfügbar sein.`, 'error');
     };
-
-    // Load concerts on page load
-    loadConcerts();
   </script>
 </body>
 </html>
