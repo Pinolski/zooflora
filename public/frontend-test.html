@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Frontend Test - Konzerte</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .concert-item { border: 1px solid #ddd; padding: 10px; margin: 10px 0; }
+    .upcoming { border-left: 4px solid #28a745; }
+    .past { border-left: 4px solid #dc3545; }
+    .btn { padding: 8px 16px; background: #007bff; color: white; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Frontend Test - Konzerte</h1>
+  <button class="btn" onclick="loadConcerts()">🔄 Konzerte laden</button>
+  
+  <h2>Kommende Shows</h2>
+  <div id="upcomingShows">
+    <p>Lade kommende Shows...</p>
+  </div>
+  
+  <h2>Vergangene Shows</h2>
+  <div id="pastShows">
+    <p>Lade vergangene Shows...</p>
+  </div>
+
+  <script>
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const months = ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'];
+      
+      return {
+        day: date.getDate().toString().padStart(2, '0'),
+        month: months[date.getMonth()],
+        year: date.getFullYear().toString()
+      };
+    }
+
+    function formatLocation(city, venue) {
+      return `${city}, Deutschland`;
+    }
+
+    function displayShows(concerts) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const upcoming = concerts
+        .filter(show => {
+          const showDate = new Date(show.date);
+          return showDate >= today;
+        })
+        .sort((a, b) => new Date(a.date) - new Date(b.date)); // Sortiere kommende Shows: nächste zuerst
+      
+      const past = concerts.filter(show => {
+        const showDate = new Date(show.date);
+        return showDate < today;
+      });
+      
+      console.log('🎵 Upcoming shows:', upcoming);
+      console.log('🎵 Past shows:', past);
+      
+      // Display upcoming shows
+      const upcomingHtml = upcoming.map(show => {
+        const date = formatDate(show.date);
+        return `
+          <div class="concert-item upcoming">
+            <h3>${show.title}</h3>
+            <div>📅 ${date.day}.${date.month}.${date.year} | 🏢 ${show.city} | ⏰ ${show.time || 'TBA'}</div>
+            <div>📍 ${formatLocation(show.city, show.venue)}</div>
+          </div>
+        `;
+      }).join('');
+      
+      // Display past shows
+      const pastHtml = past.map(show => {
+        const date = formatDate(show.date);
+        return `
+          <div class="concert-item past">
+            <h3>${show.title}</h3>
+            <div>📅 ${date.day}.${date.month}.${date.year} | 🏢 ${show.city} | ⏰ ${show.time || 'TBA'}</div>
+            <div>📍 ${formatLocation(show.city, show.venue)}</div>
+          </div>
+        `;
+      }).join('');
+      
+      document.getElementById('upcomingShows').innerHTML = upcomingHtml || '<p>Keine kommenden Shows</p>';
+      document.getElementById('pastShows').innerHTML = pastHtml || '<p>Keine vergangenen Shows</p>';
+    }
+
+    async function loadConcerts() {
+      try {
+        console.log('🔄 Loading concerts from API...');
+        const response = await fetch('/api/concerts');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const concerts = await response.json();
+        console.log('🎵 Loaded concerts from API:', concerts);
+        console.log('🎵 Number of concerts:', concerts.length);
+        displayShows(concerts);
+      } catch (error) {
+        console.error('❌ Error loading concerts:', error);
+        document.getElementById('upcomingShows').innerHTML = 
+          '<p style="color: red;">Fehler beim Laden der Konzerte: ' + error.message + '</p>';
+        document.getElementById('pastShows').innerHTML = 
+          '<p style="color: red;">Fehler beim Laden der Konzerte: ' + error.message + '</p>';
+      }
+    }
+
+    // Load concerts on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      loadConcerts();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Debug Admin Interface</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .concert-item { border: 1px solid #ddd; padding: 10px; margin: 10px 0; }
+    .btn { padding: 8px 16px; background: #007bff; color: white; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Debug Admin Interface</h1>
+  <button class="btn" onclick="loadConcerts()">🔄 Konzerte laden</button>
+  <div id="concertsContainer">
+    <p>Klicke auf "Konzerte laden" um die Konzerte zu laden...</p>
+  </div>
+
+  <script>
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('de-DE', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+    }
+
+    function getStatusBadge(dateString) {
+      const today = new Date();
+      const concertDate = new Date(dateString);
+      const isUpcoming = concertDate >= today;
+      
+      return isUpcoming 
+        ? '<span style="background: #d4edda; color: #155724; padding: 2px 8px; border-radius: 12px; font-size: 12px;">Kommend</span>'
+        : '<span style="background: #f8d7da; color: #721c24; padding: 2px 8px; border-radius: 12px; font-size: 12px;">Vergangen</span>';
+    }
+
+    function displayConcerts(concerts) {
+      console.log('🎭 Displaying concerts:', concerts);
+      const container = document.getElementById('concertsContainer');
+      
+      if (concerts.length === 0) {
+        console.log('📭 No concerts to display');
+        container.innerHTML = '<p>Keine Konzerte gefunden.</p>';
+        return;
+      }
+      
+      const concertsHtml = concerts.map(concert => `
+        <div class="concert-item">
+          <h3>${concert.title} ${getStatusBadge(concert.date)}</h3>
+          <div>
+            📅 ${formatDate(concert.date)} | 🏢 ${concert.city} | ⏰ ${concert.time || 'TBA'}
+          </div>
+        </div>
+      `).join('');
+      
+      console.log('🎨 Generated HTML:', concertsHtml);
+      container.innerHTML = concertsHtml;
+    }
+
+    async function loadConcerts() {
+      try {
+        console.log('🔄 Loading concerts...');
+        const response = await fetch('/api/concerts');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const concerts = await response.json();
+        console.log('🎵 Concerts loaded:', concerts);
+        displayConcerts(concerts);
+        console.log(`🎵 Loaded ${concerts.length} concerts`);
+      } catch (error) {
+        console.error('❌ Error loading concerts:', error);
+        document.getElementById('concertsContainer').innerHTML = 
+          '<p style="color: red;">Fehler beim Laden der Konzerte: ' + error.message + '</p>';
+      }
+    }
+
+    // Load concerts on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      loadConcerts();
+    });
+  </script>
+</body>
+</html>

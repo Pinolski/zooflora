@@ -1,0 +1,511 @@
+/* ZooFlora DatePicker Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap');
+
+/* Vue3DatePicker Global Styling - Höchste Spezifität */
+.vue-datepicker-wrapper .dp__input,
+.dp__input {
+  width: 100% !important;
+  padding: 16px 20px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 2px solid #333 !important;
+  color: #ffffff !important;
+  font-family: 'Roboto Mono', monospace !important;
+  font-size: 16px !important;
+  transition: all 0.3s ease !important;
+  box-sizing: border-box !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-weight: 500 !important;
+  border-radius: 0 !important;
+  min-height: 56px !important; /* Gleiche Höhe wie andere Inputs */
+}
+
+.vue-datepicker-wrapper .dp__input:focus,
+.dp__input:focus {
+  outline: none !important;
+  border-color: #FFED00 !important;
+  background: rgba(255, 237, 0, 0.05) !important;
+  box-shadow: 0 0 20px rgba(255, 237, 0, 0.2) !important;
+}
+
+.vue-datepicker-wrapper .dp__input:hover,
+.dp__input:hover {
+  border-color: #FFED00 !important;
+  background: rgba(255, 237, 0, 0.05) !important;
+}
+
+.vue-datepicker-wrapper .dp__input::placeholder,
+.dp__input::placeholder {
+  color: #666 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Menu Container - Enhanced */
+.vue-datepicker-wrapper .dp__menu,
+.dp__menu {
+  background: #181818 !important;
+  border: 2px solid #FFED00 !important;
+  border-radius: 0 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 237, 0, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+  z-index: 9999 !important;
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  margin-top: 4px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Calendar Container */
+.vue-datepicker-wrapper .dp__calendar,
+.dp__calendar {
+  background: #181818 !important;
+  color: #ffffff !important;
+  padding: 20px !important;
+  border-radius: 0 !important;
+}
+
+/* Calendar Header */
+.vue-datepicker-wrapper .dp__calendar_header,
+.dp__calendar_header {
+  background: #181818 !important;
+  color: #FFED00 !important;
+  font-family: 'Roboto Mono', monospace !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-weight: 600 !important;
+  padding: 10px 0 !important;
+  border-bottom: 1px solid rgba(255, 237, 0, 0.3) !important;
+  margin-bottom: 10px !important;
+}
+
+.vue-datepicker-wrapper .dp__calendar_header_item,
+.dp__calendar_header_item {
+  color: #FFED00 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+}
+
+/* Calendar Items - Enhanced */
+.vue-datepicker-wrapper .dp__calendar_item,
+.dp__calendar_item {
+  color: #ffffff !important;
+  font-family: 'Roboto Mono', monospace !important;
+  font-weight: 600 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 0 !important;
+  padding: 12px 16px !important;
+  margin: 2px !important;
+  border: 1px solid transparent !important;
+  text-align: center !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.vue-datepicker-wrapper .dp__calendar_item:hover,
+.dp__calendar_item:hover {
+  background: rgba(255, 237, 0, 0.1) !important;
+  color: #FFED00 !important;
+  transform: scale(1.02) !important;
+  box-shadow: 0 0 10px rgba(255, 237, 0, 0.2) !important;
+}
+
+.vue-datepicker-wrapper .dp__calendar_item.dp__active_date,
+.dp__calendar_item.dp__active_date {
+  background: #FFED00 !important;
+  color: #181818 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 0 20px rgba(255, 237, 0, 0.5) !important;
+  transform: scale(1.1) !important;
+}
+
+.vue-datepicker-wrapper .dp__calendar_item.dp__today,
+.dp__calendar_item.dp__today {
+  border: 2px solid #FFED00 !important;
+  color: #FFED00 !important;
+  font-weight: 700 !important;
+  position: relative !important;
+}
+
+.vue-datepicker-wrapper .dp__calendar_item.dp__today::after,
+.dp__calendar_item.dp__today::after {
+  content: 'TODAY' !important;
+  position: absolute !important;
+  top: -8px !important;
+  right: -8px !important;
+  background: #FFED00 !important;
+  color: #181818 !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  padding: 2px 4px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+.vue-datepicker-wrapper .dp__calendar_item.dp__range_start,
+.vue-datepicker-wrapper .dp__calendar_item.dp__range_end,
+.dp__calendar_item.dp__range_start,
+.dp__calendar_item.dp__range_end {
+  background: #FFED00 !important;
+  color: #181818 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 0 15px rgba(255, 237, 0, 0.4) !important;
+}
+
+.vue-datepicker-wrapper .dp__calendar_item.dp__range_between,
+.dp__calendar_item.dp__range_between {
+  background: rgba(255, 237, 0, 0.2) !important;
+  color: #FFED00 !important;
+  font-weight: 600 !important;
+}
+
+.vue-datepicker-wrapper .dp__calendar_item.dp__disabled,
+.dp__calendar_item.dp__disabled {
+  color: #444 !important;
+  opacity: 0.3 !important;
+}
+
+.vue-datepicker-wrapper .dp__calendar_item.dp__disabled:hover,
+.dp__calendar_item.dp__disabled:hover {
+  background: transparent !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Navigation Arrows */
+.vue-datepicker-wrapper .dp__arrow_top,
+.vue-datepicker-wrapper .dp__arrow_bottom,
+.vue-datepicker-wrapper .dp__arrow_left,
+.vue-datepicker-wrapper .dp__arrow_right,
+.dp__arrow_top,
+.dp__arrow_bottom,
+.dp__arrow_left,
+.dp__arrow_right {
+  border-color: #FFED00 !important;
+  transition: all 0.3s ease !important;
+}
+
+.vue-datepicker-wrapper .dp__arrow_top:hover,
+.vue-datepicker-wrapper .dp__arrow_bottom:hover,
+.vue-datepicker-wrapper .dp__arrow_left:hover,
+.vue-datepicker-wrapper .dp__arrow_right:hover,
+.dp__arrow_top:hover,
+.dp__arrow_bottom:hover,
+.dp__arrow_left:hover,
+.dp__arrow_right:hover {
+  border-color: #ffd700 !important;
+  transform: scale(1.1) !important;
+  filter: drop-shadow(0 0 5px rgba(255, 237, 0, 0.3)) !important;
+}
+
+/* Month/Year Selector */
+.vue-datepicker-wrapper .dp__month_year_select,
+.dp__month_year_select {
+  background: #181818 !important;
+  color: #FFED00 !important;
+  border: 2px solid #FFED00 !important;
+  font-family: 'Roboto Mono', monospace !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  border-radius: 0 !important;
+}
+
+.vue-datepicker-wrapper .dp__month_year_select:hover,
+.dp__month_year_select:hover {
+  background: rgba(255, 237, 0, 0.1) !important;
+  box-shadow: 0 0 10px rgba(255, 237, 0, 0.2) !important;
+  transform: translateY(-1px) !important;
+}
+
+.vue-datepicker-wrapper .dp__month_year_select:focus,
+.dp__month_year_select:focus {
+  outline: none !important;
+  box-shadow: 0 0 20px rgba(255, 237, 0, 0.4) !important;
+}
+
+/* Action Buttons */
+.vue-datepicker-wrapper .dp__action_button,
+.dp__action_button {
+  background: transparent !important;
+  color: #FFED00 !important;
+  border: 2px solid #FFED00 !important;
+  font-family: 'Roboto Mono', monospace !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  font-weight: 600 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.vue-datepicker-wrapper .dp__action_button::before,
+.dp__action_button::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: #FFED00 !important;
+  transition: left 0.3s ease !important;
+  z-index: -1 !important;
+}
+
+.vue-datepicker-wrapper .dp__action_button:hover,
+.dp__action_button:hover {
+  color: #181818 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 15px rgba(255, 237, 0, 0.3) !important;
+}
+
+.vue-datepicker-wrapper .dp__action_button:hover::before,
+.dp__action_button:hover::before {
+  left: 0 !important;
+}
+
+/* Time Picker Specific */
+.vue-datepicker-wrapper .dp__time_picker,
+.dp__time_picker {
+  background: #181818 !important;
+  border: 2px solid #FFED00 !important;
+  border-radius: 0 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 237, 0, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+  padding: 20px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.vue-datepicker-wrapper .dp__time_picker_wrap,
+.dp__time_picker_wrap {
+  background: #181818 !important;
+  border: 2px solid #FFED00 !important;
+  border-radius: 0 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 237, 0, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+  padding: 20px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.vue-datepicker-wrapper .dp__time_picker_item,
+.dp__time_picker_item {
+  color: #ffffff !important;
+  font-family: 'Roboto Mono', monospace !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border-radius: 0 !important;
+  position: relative !important;
+  padding: 12px 16px !important;
+  margin: 4px !important;
+  border: 1px solid transparent !important;
+  text-align: center !important;
+  min-width: 50px !important;
+  min-height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.vue-datepicker-wrapper .dp__time_picker_item:hover,
+.dp__time_picker_item:hover {
+  background: rgba(255, 237, 0, 0.1) !important;
+  color: #FFED00 !important;
+  transform: scale(1.02) !important;
+  box-shadow: 0 0 10px rgba(255, 237, 0, 0.2) !important;
+}
+
+.vue-datepicker-wrapper .dp__time_picker_item.dp__active,
+.dp__time_picker_item.dp__active {
+  background: #FFED00 !important;
+  color: #181818 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 0 20px rgba(255, 237, 0, 0.5) !important;
+  transform: scale(1.1) !important;
+}
+
+.dp__time_picker_item.dp__active::after {
+  content: '✓' !important;
+  position: absolute !important;
+  top: -5px !important;
+  right: -5px !important;
+  background: #181818 !important;
+  color: #FFED00 !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  width: 16px !important;
+  height: 16px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 2px solid #FFED00 !important;
+}
+
+.vue-datepicker-wrapper .dp__time_picker_arrow,
+.dp__time_picker_arrow {
+  color: #FFED00 !important;
+  transition: all 0.3s ease !important;
+  filter: drop-shadow(0 0 5px rgba(255, 237, 0, 0.3)) !important;
+}
+
+.vue-datepicker-wrapper .dp__time_picker_arrow:hover,
+.dp__time_picker_arrow:hover {
+  color: #ffd700 !important;
+  transform: scale(1.1) !important;
+  filter: drop-shadow(0 0 8px rgba(255, 237, 0, 0.4)) !important;
+}
+
+.dp__time_picker_arrow_up {
+  border-bottom-color: #FFED00 !important;
+  transition: all 0.3s ease !important;
+}
+
+.dp__time_picker_arrow_down {
+  border-top-color: #FFED00 !important;
+  transition: all 0.3s ease !important;
+}
+
+.dp__time_picker_arrow_up:hover {
+  border-bottom-color: #ffd700 !important;
+  transform: translateY(-2px) !important;
+}
+
+.dp__time_picker_arrow_down:hover {
+  border-top-color: #ffd700 !important;
+  transform: translateY(2px) !important;
+}
+
+.dp__time_picker_separator {
+  color: #FFED00 !important;
+  font-weight: 700 !important;
+  font-size: 18px !important;
+  text-shadow: 0 0 8px rgba(255, 237, 0, 0.3) !important;
+  animation: pulse 3s infinite !important;
+  margin: 0 10px !important;
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(255, 237, 0, 0.5);
+  }
+  50% { 
+    opacity: 0.7;
+    text-shadow: 0 0 20px rgba(255, 237, 0, 0.8);
+  }
+}
+
+/* Input Icon */
+.dp__input_icon {
+  color: #FFED00 !important;
+  transition: all 0.3s ease !important;
+  filter: drop-shadow(0 0 5px rgba(255, 237, 0, 0.3)) !important;
+}
+
+.dp__input_icon:hover {
+  color: #ffd700 !important;
+  transform: scale(1.1) !important;
+  filter: drop-shadow(0 0 10px rgba(255, 237, 0, 0.5)) !important;
+}
+
+.dp__input_icon_pad {
+  padding-right: 50px !important;
+}
+
+/* Overlay */
+.dp__overlay {
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+.dp__overlay_cell {
+  color: #ffffff !important;
+  font-family: 'Roboto Mono', monospace !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  transition: all 0.3s ease !important;
+}
+
+.dp__overlay_cell:hover {
+  background: rgba(255, 237, 0, 0.1) !important;
+  color: #FFED00 !important;
+  transform: scale(1.02) !important;
+  box-shadow: 0 0 8px rgba(255, 237, 0, 0.2) !important;
+}
+
+.dp__overlay_cell.dp__active_date {
+  background: #FFED00 !important;
+  color: #181818 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 0 15px rgba(255, 237, 0, 0.4) !important;
+}
+
+/* Loading States */
+.dp__loading {
+  border-color: #FFED00 !important;
+}
+
+.dp__loading::after {
+  border-color: #FFED00 transparent transparent transparent !important;
+}
+
+/* Error States */
+.dp__input_error {
+  border-color: #ff0000 !important;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3) !important;
+}
+
+.dp__input_error:focus {
+  border-color: #ff0000 !important;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.4) !important;
+}
+
+/* Disabled States */
+.dp__time_picker_item.dp__disabled {
+  color: #444 !important;
+  opacity: 0.3 !important;
+}
+
+.dp__time_picker_item.dp__disabled:hover {
+  background: transparent !important;
+  transform: none !important;
+  box-shadow: none !important;
+  color: #444 !important;
+}
+
+/* Focus States */
+.dp__time_picker_item:focus {
+  outline: 2px solid #FFED00 !important;
+  outline-offset: 2px !important;
+}
+
+/* Selection Animation */
+.dp__time_picker_item.dp__active {
+  animation: selectPulse 0.3s ease-out !important;
+}
+
+@keyframes selectPulse {
+  0% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(255, 237, 0, 0.5);
+  }
+  50% { 
+    transform: scale(1.15);
+    box-shadow: 0 0 25px rgba(255, 237, 0, 0.8);
+  }
+  100% { 
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 237, 0, 0.5);
+  }
+}

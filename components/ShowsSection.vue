@@ -33,6 +33,7 @@
             <div 
               v-for="(show, index) in upcomingShows" 
               :key="show.id"
+              :id="`shows-${show.id}`"
               class="show-item upcoming"
               :class="`show-${index + 1}`"
             >
@@ -65,6 +66,7 @@
             <div 
               v-for="(show, index) in pastShows" 
               :key="show.id"
+              :id="`shows-${show.id}`"
               class="show-item past"
               :class="`show-${index + 1}`"
             >
@@ -108,126 +110,27 @@ import { onMounted } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// Load concerts automatically from content files
-const concerts = ref([
-  {
-    _id: '20251101-test-venue-ber-den-wolken-2025-yeah',
-    title: 'Test Venue über den Wolken 2025 YEAH',
-    date: '2025-11-01',
-    city: 'Bielefeld',
-    venue: 'ndüsmümdüsmnünsüd',
-    time: '23:00 Uhr',
-    ticket_url: 'https://www.loremipsum.de/',
-    published: true
-  },
-  {
-    _id: '20251029-test-venue-ber-den-wolken',
-    title: 'Test Venue über den Wolken',
-    date: '2025-10-29',
-    city: 'Köln',
-    venue: 'Das ist ein Test. ob wir den benötigen?',
-    time: '20:00 Uhr',
-    ticket_url: 'https://www.instagram.com/purehonestmusic_/',
-    photos_url: 'https://www.instagram.com/',
-    published: true
-  },
-  {
-    _id: '20251028-sdcsdcsdc',
-    title: 'sdcsdcsdc',
-    date: '2025-10-28',
-    city: 'sdsdcsdc',
-    venue: 'sdcsdcsdc',
-    time: '20:00 Uhr',
-    ticket_url: 'https://www.instagram.com/p/DP_EZSjDK5D/',
-    published: true
-  },
-  {
-    _id: '20251024-test12345',
-    title: 'Test12345',
-    date: '2025-10-24',
-    city: 'Test-Stadt am Rhein',
-    venue: 'Werden die ddetails überhaupt angezeigt?',
-    time: '23:00 Uhr',
-    ticket_url: 'https://www.instagram.com/purehonestmusic_/',
-    published: true
-  },
-  {
-    _id: '20240405-post-punk-festival-muenchen',
-    title: 'Post-Punk Festival',
-    date: '2024-04-05',
-    city: 'München',
-    venue: 'Festival Grounds',
-    time: '19:30 Uhr',
-    photos_url: 'https://example.com/photos',
-    published: true
-  },
-  {
-    _id: '20240322-underground-venue-hamburg',
-    title: 'Underground Venue',
-    date: '2024-03-22',
-    city: 'Hamburg',
-    venue: 'Underground Club',
-    time: '21:00 Uhr',
-    photos_url: 'https://example.com/photos',
-    published: true
-  },
-  {
-    _id: '20240315-club-indigo-berlin',
-    title: 'Club Indigo',
-    date: '2024-03-15',
-    city: 'Berlin',
-    venue: 'Club Indigo',
-    time: '20:00 Uhr',
-    photos_url: 'https://example.com/photos',
-    published: true
-  },
-  {
-    _id: '20240210-dark-wave-club-koeln',
-    title: 'Dark Wave Club',
-    date: '2024-02-10',
-    city: 'Köln',
-    venue: 'Dark Wave Club',
-    time: '20:30 Uhr',
-    photos_url: 'https://example.com/photos',
-    published: true
-  },
-  {
-    _id: '20240125-indie-night-frankfurt',
-    title: 'Indie Night',
-    date: '2024-01-25',
-    city: 'Frankfurt',
-    venue: 'Indie Club',
-    time: '21:00 Uhr',
-    photos_url: 'https://example.com/photos',
-    published: true
-  },
-  {
-    _id: '20240112-experimental-stage-stuttgart',
-    title: 'Experimental Stage',
-    date: '2024-01-12',
-    city: 'Stuttgart',
-    venue: 'Experimental Stage',
-    time: '20:00 Uhr',
-    photos_url: 'https://example.com/photos',
-    published: true
-  }
-])
+// Load concerts dynamically from API
+const concerts = ref([])
 
 // Load concerts on component mount
 onMounted(async () => {
   try {
-    // Load from content system
-    const result = await queryContent('concerts')
-      .where({ published: true })
-      .sort({ date: -1 })
-      .find()
-    console.log('🎵 Loaded concerts from content:', result)
-    if (result && result.length > 0) {
-      concerts.value = result
+    console.log('🔄 Loading concerts from API...')
+    // Load from API
+    const response = await fetch('/api/concerts')
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
+    const result = await response.json()
+    console.log('🎵 Loaded concerts from API:', result)
+    console.log('🎵 Number of concerts:', result.length)
+    concerts.value = result
+    console.log('🎵 Concerts ref updated:', concerts.value)
   } catch (error) {
-    console.error('❌ Error loading concerts from content:', error)
-    // Keep static data as fallback
+    console.error('❌ Error loading concerts from API:', error)
+    // Keep empty array as fallback
+    concerts.value = []
   }
   
   // Force reactivity update
@@ -297,6 +200,27 @@ onMounted(async () => {
       })
     })
   })
+  
+  // Handle anchor scrolling for specific concerts
+  const hash = window.location.hash
+  if (hash && hash.startsWith('#shows-')) {
+    const concertId = hash.replace('#shows-', '')
+    console.log('🎯 Scrolling to concert:', concertId)
+    
+    // Wait for DOM to be ready and then scroll
+    setTimeout(() => {
+      const element = document.getElementById(`shows-${concertId}`)
+      if (element) {
+        element.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        })
+        console.log('✅ Scrolled to concert:', concertId)
+      } else {
+        console.log('❌ Concert element not found:', concertId)
+      }
+    }, 1000) // Wait for GSAP animations to complete
+  }
 })
 
 // Helper function to format date
@@ -316,31 +240,84 @@ const formatLocation = (city, venue) => {
   return `${city}, Deutschland`
 }
 
+// Helper function to format time
+const formatTime = (timeString) => {
+  // Convert to string and handle null/undefined
+  if (!timeString) return ''
+  
+  const timeStr = String(timeString)
+  
+  // If already contains "Uhr", extract time and round to 15min intervals
+  if (timeStr.includes('Uhr')) {
+    const cleanTime = timeStr.replace(' Uhr', '')
+    return roundTo15Minutes(cleanTime) + ' Uhr'
+  }
+  
+  // If contains colon, round to 15min intervals and add " Uhr"
+  if (timeStr.includes(':')) {
+    return roundTo15Minutes(timeStr) + ' Uhr'
+  }
+  
+  // If 4 digits without colon, format as HH:MM and round
+  if (timeStr.length === 4 && /^\d{4}$/.test(timeStr)) {
+    const formatted = timeStr.substring(0, 2) + ':' + timeStr.substring(2)
+    return roundTo15Minutes(formatted) + ' Uhr'
+  }
+  
+  return timeStr
+}
+
+// Helper function to round time to 15-minute intervals
+const roundTo15Minutes = (timeStr) => {
+  if (!timeStr || !timeStr.includes(':')) return timeStr
+  
+  const [hours, minutes] = timeStr.split(':').map(Number)
+  
+  // Round minutes to nearest 15-minute interval
+  const roundedMinutes = Math.round(minutes / 15) * 15
+  
+  // Handle hour overflow
+  let finalHours = hours
+  let finalMinutes = roundedMinutes
+  
+  if (finalMinutes >= 60) {
+    finalHours += 1
+    finalMinutes = 0
+  }
+  
+  // Format with leading zeros
+  return `${finalHours.toString().padStart(2, '0')}:${finalMinutes.toString().padStart(2, '0')}`
+}
+
 // Computed properties for upcoming and past shows
 const upcomingShows = computed(() => {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   
-  return concerts.value
+  const filtered = concerts.value
     .filter(show => {
       const showDate = new Date(show.date)
       return showDate >= today
     })
+    .sort((a, b) => new Date(a.date) - new Date(b.date)) // Sortiere kommende Shows: nächste zuerst
     .map(show => ({
       id: show._id || show._path?.replace('/concerts/', ''),
       date: formatDate(show.date),
       venue: show.title,
       location: formatLocation(show.city, show.venue),
-      time: show.time,
+      time: formatTime(show.time),
       ticketLink: show.ticket_url || '#'
     }))
+  
+  console.log('🎵 Upcoming shows computed (sorted by date):', filtered)
+  return filtered
 })
 
 const pastShows = computed(() => {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   
-  return concerts.value
+  const filtered = concerts.value
     .filter(show => {
       const showDate = new Date(show.date)
       return showDate < today
@@ -350,9 +327,12 @@ const pastShows = computed(() => {
       date: formatDate(show.date),
       venue: show.title,
       location: formatLocation(show.city, show.venue),
-      time: show.time,
+      time: formatTime(show.time),
       photosLink: show.photos_url || '#'
     }))
+  
+  console.log('🎵 Past shows computed:', filtered)
+  return filtered
 })
 
 // Debug logging

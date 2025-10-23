@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <title>ZooFlora Admin - Login</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Roboto Mono', monospace;
+      background-color: #181818;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Animated Pixel Background */
+    .pixel-blast-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .pixel-grid {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .pixel {
+      position: absolute;
+      background: #FFED00;
+      opacity: 0.1;
+      animation: pixelFloat 6s infinite ease-in-out;
+    }
+    
+    @keyframes pixelFloat {
+      0%, 100% { 
+        opacity: 0.1;
+        transform: translateY(0px) rotate(0deg);
+      }
+      50% { 
+        opacity: 0.3;
+        transform: translateY(-20px) rotate(180deg);
+      }
+    }
+    
+    .login-container {
+      background: rgba(24, 24, 24, 0.95);
+      border: 2px solid #FFED00;
+      padding: 60px 40px;
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 450px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .logo-container {
+      margin-bottom: 40px;
+      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .logo-svg {
+      width: 280px;
+      height: auto;
+      filter: drop-shadow(0 0 20px rgba(255, 237, 0, 0.3));
+      animation: logoGlow 3s ease-in-out infinite;
+    }
+    
+    @keyframes logoGlow {
+      0%, 100% {
+        filter: drop-shadow(0 0 20px rgba(255, 237, 0, 0.3));
+        transform: scale(1);
+      }
+      50% {
+        filter: drop-shadow(0 0 30px rgba(255, 237, 0, 0.6));
+        transform: scale(1.02);
+      }
+    }
+    
+    .logo-subtitle {
+      color: #FFED00;
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logo-icon {
+      font-size: 1.5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 30px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 12px;
+      color: #FFED00;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.9rem;
+    }
+    
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #333;
+      color: #ffffff;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      position: relative;
+    }
+    
+    input[type="text"]:focus, input[type="password"]:focus {
+      outline: none;
+      border-color: #FFED00;
+      background: rgba(255, 237, 0, 0.05);
+      box-shadow: 0 0 20px rgba(255, 237, 0, 0.2);
+    }
+    
+    input[type="text"]::placeholder, input[type="password"]::placeholder {
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 18px 24px;
+      background: transparent;
+      border: 2px solid #FFED00;
+      color: #FFED00;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: #FFED00;
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+    
+    .btn:hover {
+      color: #181818;
+    }
+    
+    .btn:hover::before {
+      left: 0;
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn:disabled:hover {
+      color: #FFED00;
+    }
+    
+    .btn:disabled::before {
+      left: -100%;
+    }
+    
+    .message {
+      padding: 16px 20px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 2px solid;
+    }
+    
+    .message.success {
+      background: rgba(0, 255, 0, 0.1);
+      color: #00ff00;
+      border-color: #00ff00;
+    }
+    
+    .message.error {
+      background: rgba(255, 0, 0, 0.1);
+      color: #ff0000;
+      border-color: #ff0000;
+    }
+    
+    .loading {
+      display: none;
+      text-align: center;
+      color: #FFED00;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #FFED00;
+      border-top: 2px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Glitch Effect for Title */
+    .glitch {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+    }
+    
+    .glitch::before {
+      animation: glitch-1 0.5s infinite;
+      color: #ff0000;
+      z-index: -1;
+    }
+    
+    .glitch::after {
+      animation: glitch-2 0.5s infinite;
+      color: #00ff00;
+      z-index: -2;
+    }
+    
+    @keyframes glitch-1 {
+      0%, 14%, 15%, 49%, 50%, 99%, 100% {
+        transform: translate(0);
+      }
+      15%, 49% {
+        transform: translate(-2px, 2px);
+      }
+    }
+    
+    @keyframes glitch-2 {
+      0%, 20%, 21%, 62%, 63%, 99%, 100% {
+        transform: translate(0);
+      }
+      21%, 62% {
+        transform: translate(2px, -2px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Pixel Background -->
+  <div class="pixel-blast-container">
+    <div class="pixel-grid"></div>
+  </div>
+
+  <div class="login-container">
+    <div class="logo-container">
+      <img src="/LogoZooFlora.svg" alt="ZooFlora Logo" class="logo-svg">
+      <div class="logo-subtitle">
+        <span class="logo-icon">🔐</span>
+        <span>ADMIN</span>
+      </div>
+    </div>
+    
+    <div id="message" class="message" style="display: none;"></div>
+    <div id="loading" class="loading">⏳ Anmeldung läuft...</div>
+    
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">Benutzername:</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Passwort:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      
+      <button type="submit" class="btn" id="loginBtn">
+        🚀 Anmelden
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm')
+    const messageDiv = document.getElementById('message')
+    const loadingDiv = document.getElementById('loading')
+    const loginBtn = document.getElementById('loginBtn')
+
+    function showMessage(text, type) {
+      messageDiv.textContent = text
+      messageDiv.className = `message ${type}`
+      messageDiv.style.display = 'block'
+    }
+
+    function hideMessage() {
+      messageDiv.style.display = 'none'
+    }
+
+    function setLoading(loading) {
+      if (loading) {
+        loadingDiv.style.display = 'block'
+        loginBtn.disabled = true
+        loginBtn.textContent = '⏳ Anmeldung...'
+      } else {
+        loadingDiv.style.display = 'none'
+        loginBtn.disabled = false
+        loginBtn.textContent = '🚀 Anmelden'
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      hideMessage()
+      setLoading(true)
+
+      const formData = new FormData(form)
+      const loginData = {
+        username: formData.get('username'),
+        password: formData.get('password')
+      }
+
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(loginData)
+        })
+
+        const result = await response.json()
+
+        if (response.ok && result.success) {
+          showMessage('✅ Erfolgreich angemeldet! Weiterleitung...', 'success')
+          setTimeout(() => {
+            window.location.href = '/api/admin'
+          }, 1500)
+        } else {
+          showMessage('❌ ' + (result.message || 'Anmeldung fehlgeschlagen'), 'error')
+        }
+      } catch (error) {
+        console.error('Login error:', error)
+        showMessage('❌ Netzwerkfehler. Bitte versuche es erneut.', 'error')
+      } finally {
+        setLoading(false)
+      }
+    })
+
+    // Enter-Taste für Login
+    document.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        form.dispatchEvent(new Event('submit'))
+      }
+    })
+
+    // Generiere animierte Pixel
+    function generatePixels() {
+      const pixelGrid = document.querySelector('.pixel-grid')
+      const pixelCount = 200
+      
+      for (let i = 0; i < pixelCount; i++) {
+        const pixel = document.createElement('div')
+        pixel.className = 'pixel'
+        pixel.style.cssText = `
+          left: ${Math.random() * 100}%;
+          top: ${Math.random() * 100}%;
+          animation-delay: ${Math.random() * 4}s;
+          animation-duration: ${3 + Math.random() * 6}s;
+          width: ${2 + Math.random() * 3}px;
+          height: ${2 + Math.random() * 3}px;
+        `
+        pixelGrid.appendChild(pixel)
+      }
+    }
+
+    // Starte Pixel-Animation beim Laden
+    document.addEventListener('DOMContentLoaded', generatePixels)
+  </script>
+</body>
+</html>

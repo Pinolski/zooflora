@@ -12,7 +12,12 @@ export default defineNuxtConfig({
     }
   },
   ssr: true,
-  css: ['~/assets/css/main.css'],
+  css: [
+    '@vuepic/vue-datepicker/dist/main.css',  // Library CSS zuerst laden
+    '~/assets/css/main.css', 
+    '~/assets/css/datepicker-zooflora.css',  // Dann unsere Overrides
+    '~/assets/css/vue-datepicker-override.css'  // Höchste Priorität
+  ],
   app: {
     head: {
       title: 'ZooFlora - Indie/Post-Punk Band',
@@ -25,6 +30,26 @@ export default defineNuxtConfig({
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }
       ]
+    }
+  },
+  nitro: {
+    routeRules: {
+      '/api/**': { 
+        headers: { 
+          'X-Robots-Tag': 'noindex, nofollow, noarchive, nosnippet, noimageindex',
+          'X-Content-Type-Options': 'nosniff',
+          'X-Frame-Options': 'DENY',
+          'X-XSS-Protection': '1; mode=block'
+        }
+      },
+      '/admin/**': { 
+        headers: { 
+          'X-Robots-Tag': 'noindex, nofollow, noarchive, nosnippet, noimageindex',
+          'X-Content-Type-Options': 'nosniff',
+          'X-Frame-Options': 'DENY',
+          'X-XSS-Protection': '1; mode=block'
+        }
+      }
     }
   },
   gtag: {

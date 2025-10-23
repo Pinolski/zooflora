@@ -1,0 +1,33 @@
+# Security headers for admin areas
+<IfModule mod_headers.c>
+    # Block admin and API routes from search engines
+    <LocationMatch "^(/api/|/admin/)">
+        Header set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noimageindex"
+        Header set X-Content-Type-Options "nosniff"
+        Header set X-Frame-Options "DENY"
+        Header set X-XSS-Protection "1; mode=block"
+        Header set Referrer-Policy "no-referrer"
+    </LocationMatch>
+</IfModule>
+
+# Block access to sensitive files
+<Files "*.md">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files "config.yml">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Block admin interface files
+<Files "admin-interface.html">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files "login.html">
+    Order Allow,Deny
+    Deny from all
+</Files>

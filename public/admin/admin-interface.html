@@ -1,0 +1,1936 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <title>ZooFlora CMS - Konzerte verwalten</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Roboto Mono', monospace;
+      background-color: #181818;
+      color: #ffffff;
+      line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+    
+    /* Animated Pixel Background */
+    .pixel-blast-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .pixel-grid {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .pixel {
+      position: absolute;
+      background: #FFED00;
+      opacity: 0.05;
+      animation: pixelFloat 8s infinite ease-in-out;
+    }
+    
+    @keyframes pixelFloat {
+      0%, 100% { 
+        opacity: 0.05;
+        transform: translateY(0px) rotate(0deg);
+      }
+      50% { 
+        opacity: 0.15;
+        transform: translateY(-30px) rotate(180deg);
+      }
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(24, 24, 24, 0.95);
+      border: 2px solid #FFED00;
+      padding: 40px;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+    
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+    }
+    
+    .admin-header h1 {
+      color: #FFED00;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 0;
+      border: none;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .admin-logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      position: relative;
+    }
+    
+    .admin-logo-icon {
+      font-size: 2rem;
+      filter: drop-shadow(0 0 10px rgba(255, 237, 0, 0.5));
+      animation: lockPulse 3s ease-in-out infinite;
+    }
+    
+    @keyframes lockPulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px rgba(255, 237, 0, 0.5));
+      }
+      50% {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 20px rgba(255, 237, 0, 0.8));
+      }
+    }
+    
+    .admin-logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      background: linear-gradient(135deg, #FFED00 0%, #ffd700 50%, #FFED00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      text-shadow: 0 0 20px rgba(255, 237, 0, 0.3);
+      animation: shimmerText 3s ease-in-out infinite;
+    }
+    
+    @keyframes shimmerText {
+      0%, 100% {
+        filter: brightness(1);
+      }
+      50% {
+        filter: brightness(1.2);
+      }
+    }
+    
+    .admin-logo-subtitle {
+      font-size: 0.7rem;
+      color: #999;
+      letter-spacing: 0.2em;
+      margin-left: 5px;
+      font-weight: 500;
+    }
+    
+    .admin-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    
+    .user-info {
+      color: #ffffff;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .btn-logout {
+      background: transparent !important;
+      border: 2px solid #ff4444 !important;
+      color: #ff4444 !important;
+      font-size: 16px !important;
+      cursor: pointer;
+      padding: 12px 16px !important;
+      border-radius: 0 !important;
+      transition: all 0.3s ease;
+      z-index: 10;
+      min-width: 40px !important;
+      min-height: 40px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-family: 'Roboto Mono', monospace !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      font-weight: 500 !important;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .btn-logout::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: #ff4444;
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+    
+    .btn-logout:hover {
+      color: #ffffff !important;
+    }
+    
+    .btn-logout:hover::before {
+      left: 0;
+    }
+    
+    /* Hover-Effekte entfernt */
+    .concert-list {
+      display: grid;
+      gap: 25px;
+      margin-top: 40px;
+    }
+    
+    .concert-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #333;
+      padding: 25px;
+      margin-bottom: 20px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .delete-icon {
+      position: absolute;
+      bottom: 25px;
+      right: 25px;
+      background: transparent;
+      border: 2px solid #ff4444;
+      color: #ff4444;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 12px 16px;
+      border-radius: 0;
+      transition: all 0.3s ease;
+      z-index: 10;
+      min-width: 40px;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Roboto Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+      overflow: hidden;
+    }
+    
+    .delete-icon::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: #ff4444;
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+    
+    .delete-icon:hover {
+      color: #ffffff;
+    }
+    
+    .delete-icon:hover::before {
+      left: 0;
+    }
+    
+    /* Hover-Effekte entfernt */
+    
+    .concert-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    
+    .concert-header h3 {
+      margin: 0;
+      color: #FFED00;
+      font-size: 1.4rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .concert-meta {
+      color: #cccccc;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .concert-description {
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 15px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-left: 3px solid #FFED00;
+
+      font-style: italic;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+    
+    .concert-actions {
+      margin-top: 20px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: transparent;
+      color: #FFED00;
+      text-decoration: none;
+      border: 2px solid #FFED00;
+      margin-right: 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Roboto Mono', monospace;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: #FFED00;
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+    
+    .btn:hover {
+      color: #181818;
+    }
+    
+    .btn:hover::before {
+      left: 0;
+    }
+    
+    .btn-secondary {
+      border-color: #666;
+      color: #666;
+    }
+    
+    .btn-secondary:hover {
+      color: #ffffff;
+    }
+    
+    .btn-secondary::before {
+      background: #666;
+    }
+    
+    .btn-danger {
+      border-color: #ff4444;
+      color: #ff4444;
+    }
+    
+    .btn-danger:hover {
+      color: #ffffff;
+    }
+    
+    .btn-danger::before {
+      background: #ff4444;
+    }
+    
+    /* Hover-Effekte entfernt */
+    
+    .btn-success {
+      border-color: #FFED00;
+      color: #FFED00;
+      background: transparent;
+    }
+    
+    .btn-success:hover {
+      color: #181818;
+      background: #FFED00;
+    }
+    
+    .btn-success::before {
+      background: #FFED00;
+    }
+    
+    /* Hover-Effekte entfernt */
+    
+    .add-concert {
+      margin-top: 50px;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.03);
+      position: relative;
+    }
+    
+    .add-concert h2 {
+      color: #FFED00;
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-align: center;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 10px;
+      color: #FFED00;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.9rem;
+    }
+    
+    .form-group input, 
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #333;
+      color: #ffffff;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      height: 56px; /* Identische Höhe für alle Inputs */
+    }
+    
+    /* Textarea auf gleiche Höhe setzen */
+    .form-group textarea {
+      height: 56px;
+      resize: vertical;
+    }
+    
+    /* ZooFlora Enhanced Date/Time Input Styling */
+    .zooflora-date-input,
+    .zooflora-time-input {
+      color-scheme: dark !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      font-weight: 500 !important;
+      position: relative !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    
+    /* ZooFlora Textarea Styling */
+    .zooflora-textarea {
+      color-scheme: dark !important;
+      text-transform: none !important;
+      letter-spacing: normal !important;
+      font-weight: 400 !important;
+      font-style: italic !important;
+      min-height: 80px !important;
+      resize: vertical !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    
+    
+    /* Hover-Effekte entfernt */
+    
+    .zooflora-date-input:focus,
+    .zooflora-time-input:focus {
+      transform: translateY(-2px) !important;
+      /* box-shadow: 0 8px 25px rgba(255, 237, 0, 0.3) !important; */
+    }
+    
+    .zooflora-date-input::-webkit-calendar-picker-indicator,
+    .zooflora-time-input::-webkit-calendar-picker-indicator {
+      filter: invert(1) brightness(1) contrast(1) !important;
+      cursor: pointer !important;
+      padding: 8px !important;
+      margin-left: 12px !important;
+      transition: all 0.3s ease !important;
+      border-radius: 4px !important;
+    }
+    
+    
+    /* Alle Input-Icons weiß machen */
+    .form-group input[type="date"]::-webkit-calendar-picker-indicator,
+    .form-group input[type="time"]::-webkit-calendar-picker-indicator {
+      filter: invert(1) brightness(1) contrast(1) !important;
+    }
+    
+    /* Hover-Effekte entfernt */
+    
+    /* Hover-Effekte entfernt */
+    
+    .zooflora-date-input::-webkit-datetime-edit-text,
+    .zooflora-date-input::-webkit-datetime-edit-month-field,
+    .zooflora-date-input::-webkit-datetime-edit-day-field,
+    .zooflora-date-input::-webkit-datetime-edit-year-field {
+      color: #ffffff !important;
+      font-family: 'Roboto Mono', monospace !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      font-weight: 600 !important;
+      transition: all 0.3s ease !important;
+    }
+    
+    /* Hover-Effekte entfernt */
+    
+    .zooflora-time-input::-webkit-datetime-edit-text,
+    .zooflora-time-input::-webkit-datetime-edit-hour-field,
+    .zooflora-time-input::-webkit-datetime-edit-minute-field {
+      color: #ffffff !important;
+      font-family: 'Roboto Mono', monospace !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      font-weight: 600 !important;
+      transition: all 0.3s ease !important;
+    }
+    
+    /* Hover-Effekte entfernt */
+    
+    /* ZooFlora Enhanced Animations */
+    .zooflora-date-input,
+    .zooflora-time-input {
+      position: relative !important;
+      overflow: hidden !important;
+    }
+    
+    .zooflora-date-input::before,
+    .zooflora-time-input::before {
+      content: '' !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: -100% !important;
+      width: 100% !important;
+      height: 100% !important;
+      background: linear-gradient(90deg, transparent, rgba(255, 237, 0, 0.1), transparent) !important;
+      transition: left 0.5s ease !important;
+      z-index: 1 !important;
+    }
+    
+    /* Hover-Effekte entfernt */
+    
+    /* Glow Effect on Focus */
+    .zooflora-date-input:focus,
+    .zooflora-time-input:focus {
+      animation: zoofloraGlow 2s infinite !important;
+    }
+    
+    @keyframes zoofloraGlow {
+      0%, 100% { 
+        /* box-shadow: 0 0 20px rgba(255, 237, 0, 0.3) !important; */
+      }
+      50% { 
+        /* box-shadow: 0 0 30px rgba(255, 237, 0, 0.5) !important; */
+      }
+    }
+    
+    /* Vue3DatePicker Override für Admin-Interface */
+    .vue-datepicker-wrapper .dp__input,
+    .vue-datepicker-wrapper .dp__input_wrap {
+      width: 100% !important;
+      padding: 16px 20px !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 2px solid #333 !important;
+      color: #ffffff !important;
+      font-family: 'Roboto Mono', monospace !important;
+      font-size: 16px !important;
+      transition: all 0.3s ease !important;
+      box-sizing: border-box !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      font-weight: 500 !important;
+      border-radius: 0 !important;
+      min-height: 56px !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+    
+    .vue-datepicker-wrapper .dp__input:focus {
+      outline: none !important;
+      border-color: #FFED00 !important;
+      background: rgba(255, 237, 0, 0.05) !important;
+      /* box-shadow: 0 0 20px rgba(255, 237, 0, 0.2) !important; */
+    }
+    
+    /* Hover-Effekte entfernt */
+    
+    .vue-datepicker-wrapper .dp__menu {
+      background: #181818 !important;
+      border: 2px solid #FFED00 !important;
+      border-radius: 0 !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+      backdrop-filter: blur(10px) !important;
+      z-index: 9999 !important;
+    }
+    
+    .vue-datepicker-wrapper .dp__calendar_item {
+      color: #ffffff !important;
+      font-family: 'Roboto Mono', monospace !important;
+      font-weight: 600 !important;
+      transition: all 0.3s ease !important;
+      border-radius: 0 !important;
+      padding: 12px 16px !important;
+      margin: 2px !important;
+      border: 1px solid transparent !important;
+      text-align: center !important;
+      min-width: 40px !important;
+      min-height: 40px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    
+    /* Hover-Effekte entfernt */
+    
+    .vue-datepicker-wrapper .dp__calendar_item.dp__active_date {
+      background: #FFED00 !important;
+      color: #181818 !important;
+      font-weight: 700 !important;
+      /* box-shadow: 0 0 20px rgba(255, 237, 0, 0.5) !important; */
+      transform: scale(1.1) !important;
+    }
+    
+    .vue-datepicker-wrapper .dp__time_picker_item {
+      color: #ffffff !important;
+      font-family: 'Roboto Mono', monospace !important;
+      font-weight: 600 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      transition: all 0.3s ease !important;
+      border-radius: 0 !important;
+      padding: 12px 16px !important;
+      margin: 4px !important;
+      border: 1px solid transparent !important;
+      text-align: center !important;
+      min-width: 50px !important;
+      min-height: 40px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    
+    /* Hover-Effekte entfernt */
+    
+    .vue-datepicker-wrapper .dp__time_picker_item.dp__active {
+      background: #FFED00 !important;
+      color: #181818 !important;
+      font-weight: 700 !important;
+      /* box-shadow: 0 0 20px rgba(255, 237, 0, 0.5) !important; */
+      transform: scale(1.1) !important;
+    }
+    
+    .form-group select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFED00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 16px;
+      padding-right: 50px;
+      border-radius: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+    }
+    
+    /* Hover-Effekte entfernt */
+    
+    .form-group select option {
+      background: #181818;
+      color: #ffffff;
+      padding: 12px 16px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .form-group select option:hover {
+      background: rgba(255, 237, 0, 0.1);
+      color: #FFED00;
+      font-weight: 600;
+    }
+    
+    .form-group select option:checked {
+      background: #FFED00;
+      color: #181818;
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(255, 237, 0, 0.3);
+    }
+    
+    .form-group input:focus, 
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #FFED00;
+      background: rgba(255, 237, 0, 0.05);
+      /* box-shadow: 0 0 20px rgba(255, 237, 0, 0.2); */
+    }
+    
+    /* Spezielle Dropdown-Container */
+    .form-group select {
+      position: relative;
+    }
+    
+    /* Dropdown-Animation */
+    .form-group select {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .form-group select:active {
+      transform: translateY(1px);
+    }
+    
+    /* Custom Scrollbar für Dropdowns */
+    .form-group select::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .form-group select::-webkit-scrollbar-track {
+      background: #181818;
+      border-radius: 4px;
+      border: 1px solid #333;
+    }
+    
+    .form-group select::-webkit-scrollbar-thumb {
+      background: #FFED00;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .form-group select::-webkit-scrollbar-thumb:hover {
+      background: #ffd700;
+      box-shadow: 0 0 5px rgba(255, 237, 0, 0.3);
+    }
+    
+    /* Hover-Effekte entfernt */
+    
+    .form-group input::placeholder, 
+    .form-group textarea::placeholder {
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .form-group textarea {
+      height: 120px;
+      resize: vertical;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    @media (max-width: 768px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border: 1px solid;
+      border-radius: 12px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: 'Roboto Mono', monospace;
+    }
+    
+    .status-upcoming {
+      background: rgba(0, 255, 0, 0.15);
+      color: #00ff00;
+      border-color: #00ff00;
+    }
+    
+    .status-past {
+      background: rgba(255, 0, 0, 0.15);
+      color: #ff0000;
+      border-color: #ff0000;
+    }
+    
+    .success-message {
+      background: rgba(0, 255, 0, 0.1);
+      color: #00ff00;
+      padding: 20px;
+      border: 2px solid #00ff00;
+      margin: 20px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      font-family: 'Roboto Mono', monospace;
+    }
+    
+    .error-message {
+      background: rgba(255, 0, 0, 0.1);
+      color: #ff0000;
+      padding: 20px;
+      border: 2px solid #ff0000;
+      margin: 20px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      font-family: 'Roboto Mono', monospace;
+    }
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #FFED00;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+    .refresh-btn {
+      background: #007bff;
+      color: white;
+      margin-bottom: 20px;
+    }
+    
+    .refresh-btn:hover {
+      background: #0056b3;
+    }
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+    }
+    .admin-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .user-info {
+      color: #666;
+      font-size: 14px;
+    }
+    .btn-logout {
+      background: transparent !important;
+      border: 2px solid #ff4444 !important;
+      color: #ff4444 !important;
+      font-size: 16px !important;
+      cursor: pointer;
+      padding: 12px 16px !important;
+      border-radius: 0 !important;
+      transition: all 0.3s ease;
+      z-index: 10;
+      min-width: 40px !important;
+      min-height: 40px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-family: 'Roboto Mono', monospace !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      font-weight: 500 !important;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .btn-logout:hover {
+      color: #ffffff !important;
+    }
+    
+    .btn-logout:hover::before {
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Pixel Background -->
+  <div class="pixel-blast-container">
+    <div class="pixel-grid"></div>
+  </div>
+
+  <div class="container">
+    <div class="admin-header">
+      <h1>
+        <div class="admin-logo">
+          <div>
+            <div class="admin-logo-text">ZOO/FLORA</div>
+            <div class="admin-logo-subtitle">ADMIN</div>
+          </div>
+        </div>
+      </h1>
+      <div class="admin-actions">
+        <span class="user-info">👤 Eingeloggt als: <strong>{{USERNAME}}</strong></span>
+        <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+      </div>
+    </div>
+    
+    <div id="messages"></div>
+    
+    <div class="add-concert">
+      <h2>🎵 Neues Konzert hinzufügen</h2>
+    <!--  <div class="success-message">
+        <strong>🚀 Automatisches Speichern:</strong><br>
+        1. Formular ausfüllen und "Konzert speichern" klicken<br>
+        2. Konzert wird automatisch im Backend gespeichert<br>
+        3. Erscheint SOFORT auf der Website! 🎉
+      </div>-->
+      <form id="addConcertForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="title">Titel/Venue:</label>
+            <input type="text" id="title" name="title" placeholder="z.B. Club Indigo" required>
+          </div>
+          <div class="form-group">
+            <label for="date">Datum:</label>
+            <input type="date" id="date" name="date" required class="zooflora-date-input">
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="city">Stadt:</label>
+            <input type="text" id="city" name="city" placeholder="z.B. Berlin" required>
+          </div>
+          <div class="form-group">
+            <label for="venue">Venue (detailliert):</label>
+            <input type="text" id="venue" name="venue" placeholder="z.B. Club Indigo" required>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="time">Uhrzeit:</label>
+            <input type="time" id="time" name="time" required class="zooflora-time-input" step="900">
+          </div>
+          <div class="form-group">
+            <label for="ticket_url">Ticket URL (optional):</label>
+            <input type="url" id="ticket_url" name="ticket_url" placeholder="https://...">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="photos_url">Fotos URL (optional):</label>
+          <input type="url" id="photos_url" name="photos_url" placeholder="https://...">
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Beschreibung (optional):</label>
+          <textarea id="description" name="description" placeholder="Beschreibung des Konzerts..." class="zooflora-textarea"></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-success">🎵 Konzert speichern</button>
+      </form>
+      
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Speichere Konzert...</p>
+      </div>
+    </div>
+
+    <div class="concert-list" id="concertList">
+      <h3>📅 Konzerte 
+        <!-- <button class="btn refresh-btn" onclick="loadConcerts()">🔄 Aktualisieren</button> -->
+      </h3>
+      <div id="concertsContainer">
+        <p>Lade Konzerte...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Helper functions
+    function showMessage(message, type = 'success') {
+      const messagesDiv = document.getElementById('messages');
+      const messageClass = type === 'success' ? 'success-message' : 'error-message';
+      messagesDiv.innerHTML = `<div class="${messageClass}">${message}</div>`;
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        messagesDiv.innerHTML = '';
+      }, 5000);
+    }
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('de-DE', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+    }
+
+    function getStatusBadge(dateString) {
+      const today = new Date();
+      const concertDate = new Date(dateString);
+      const isUpcoming = concertDate >= today;
+      
+      return isUpcoming 
+        ? '<span class="status-badge status-upcoming">Bevorstehend</span>'
+        : '<span class="status-badge status-past">Vergangen</span>';
+    }
+
+    function displayConcerts(concerts) {
+      console.log('🎭 Displaying concerts:', concerts);
+      const container = document.getElementById('concertsContainer');
+      
+      // Store concerts globally for edit/view functions
+      window.currentConcerts = concerts;
+      
+      if (concerts.length === 0) {
+        console.log('📭 No concerts to display');
+        container.innerHTML = '<p>Keine Konzerte gefunden.</p>';
+        return;
+      }
+      
+      const concertsHtml = concerts.map(concert => `
+        <div class="concert-item">
+          <button class="delete-icon" onclick="deleteConcert('${concert._id}')" title="Konzert löschen">Löschen</button>
+          <div class="concert-header">
+            <h3>${concert.title}</h3>
+            ${getStatusBadge(concert.date)}
+          </div>
+          <div class="concert-meta">
+            📅 ${formatDate(concert.date)} | 🏢 ${concert.city} | ⏰ ${concert.time || 'TBA'}
+          </div>
+          ${concert.description ? `<div class="concert-description">📝 ${concert.description}</div>` : ''}
+          <div class="concert-actions">
+            <button class="btn btn-secondary" onclick="editConcert('${concert._id}')">Bearbeiten</button>
+            <button class="btn" onclick="viewConcert('${concert._id}')">Anzeigen</button>
+          </div>
+        </div>
+      `).join('');
+      
+      console.log('🎨 Generated HTML:', concertsHtml);
+      container.innerHTML = concertsHtml;
+    }
+
+    async function loadConcerts() {
+      try {
+        console.log('🔄 Loading concerts...');
+        const response = await fetch('/api/concerts');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const concerts = await response.json();
+        console.log('🎵 Concerts loaded:', concerts);
+        displayConcerts(concerts);
+        console.log(`🎵 Loaded ${concerts.length} concerts`);
+      } catch (error) {
+        console.error('❌ Error loading concerts:', error);
+        document.getElementById('concertsContainer').innerHTML = 
+          '<p style="color: red;">Fehler beim Laden der Konzerte. Bitte Seite neu laden.</p>';
+      }
+    }
+
+    async function saveConcert(concert, editId = null) {
+      try {
+        let response;
+        
+        if (editId) {
+          // Update existing concert
+          console.log('🔄 Updating concert:', editId);
+          response = await fetch(`/api/concerts/${editId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(concert)
+          });
+        } else {
+          // Create new concert
+          console.log('➕ Creating new concert');
+          response = await fetch('/api/concerts', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(concert)
+          });
+        }
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.statusMessage || 'Fehler beim Speichern');
+        }
+        
+        const result = await response.json();
+        showMessage(`✅ Konzert "${concert.title}" wurde erfolgreich ${editId ? 'aktualisiert' : 'gespeichert'}!`);
+        
+        // Aktualisiere die Konzertliste
+        await loadConcerts();
+        
+        return true;
+      } catch (error) {
+        console.error('Error saving concert:', error);
+        showMessage(`❌ Fehler beim Speichern: ${error.message}`, 'error');
+        return false;
+      }
+    }
+
+    // Form submission
+    document.getElementById('addConcertForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const concert = Object.fromEntries(formData.entries());
+      
+      // Format time to include " Uhr" for display
+      if (concert.time) {
+        const timeStr = String(concert.time);
+        if (timeStr.includes(':') && !timeStr.includes('Uhr')) {
+          concert.time = timeStr + ' Uhr';
+        }
+      }
+      
+      // Show loading
+      document.getElementById('loading').style.display = 'block';
+      this.style.display = 'none';
+      
+      try {
+        const editId = this.dataset.editId;
+        const success = await saveConcert(concert, editId);
+        
+        if (success) {
+          // Reset form and edit mode
+          this.reset();
+          delete this.dataset.editId;
+          document.querySelector('.add-concert h2').textContent = 'Neues Konzert hinzufügen';
+          document.querySelector('button[type="submit"]').textContent = 'Konzert speichern';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showMessage('❌ Unerwarteter Fehler beim Speichern', 'error');
+      } finally {
+        // Hide loading
+        document.getElementById('loading').style.display = 'none';
+        this.style.display = 'block';
+      }
+    });
+
+    // Concert actions
+    window.editConcert = function(id) {
+      console.log('✏️ Editing concert:', id);
+      
+      // Find the concert in the current list
+      const concerts = window.currentConcerts || [];
+      const concert = concerts.find(c => c._id === id);
+      
+      if (!concert) {
+        showMessage('Konzert nicht gefunden!', 'error');
+        return;
+      }
+      
+      // Populate form with concert data - with proper format conversion
+      const titleField = document.getElementById('title');
+      const cityField = document.getElementById('city');
+      const venueField = document.getElementById('venue');
+      const dateField = document.getElementById('date');
+      const timeField = document.getElementById('time');
+      const ticketUrlField = document.getElementById('ticket_url');
+      const descriptionField = document.getElementById('description');
+      
+      if (titleField) titleField.value = concert.title || '';
+      if (cityField) cityField.value = concert.city || '';
+      if (venueField) venueField.value = concert.venue || '';
+      if (ticketUrlField) ticketUrlField.value = concert.ticket_url || '';
+      if (descriptionField) descriptionField.value = concert.description || '';
+      
+      // Format date for HTML date input (YYYY-MM-DD)
+      if (dateField && concert.date) {
+        try {
+          const date = new Date(concert.date);
+          const formattedDate = date.toISOString().split('T')[0]; // YYYY-MM-DD format
+          dateField.value = formattedDate;
+          console.log('📅 Formatted date:', formattedDate);
+        } catch (error) {
+          console.error('❌ Date formatting error:', error);
+          dateField.value = concert.date || '';
+        }
+      }
+      
+      // Format time for HTML time input (HH:MM)
+      if (timeField && concert.time) {
+        try {
+          // Remove "Uhr" and other text, keep only HH:MM format
+          let timeValue = concert.time.replace(/[^\d:]/g, ''); // Remove non-digit/non-colon chars
+          if (timeValue && !timeValue.includes(':')) {
+            // If no colon, assume it's HHMM format
+            if (timeValue.length === 4) {
+              timeValue = timeValue.substring(0, 2) + ':' + timeValue.substring(2);
+            }
+          }
+          timeField.value = timeValue;
+          console.log('⏰ Formatted time for input:', timeValue);
+        } catch (error) {
+          console.error('❌ Time formatting error:', error);
+          timeField.value = concert.time || '';
+        }
+      }
+      
+      // Store the concert ID for update
+      const formElement = document.getElementById('addConcertForm') || document.getElementById('concertForm');
+      if (formElement) {
+        formElement.dataset.editId = id;
+      }
+      
+      // Change form title and button
+      document.querySelector('.add-concert h2').textContent = 'Konzert bearbeiten';
+      document.querySelector('button[type="submit"]').textContent = 'Konzert aktualisieren';
+      
+      // Scroll to header anchor point - much more reliable!
+      const headerElement = document.querySelector('.admin-header h1') || document.querySelector('h1');
+      
+      if (headerElement) {
+        console.log('🎯 Found header, scrolling to top of page...');
+        
+        // Add subtle visual highlight to form (no zoom effect)
+        const formElement = document.querySelector('.add-concert');
+        if (formElement) {
+          formElement.style.transition = 'all 0.3s ease';
+          // formElement.style.boxShadow = '0 0 20px rgba(255, 237, 0, 0.3)';
+          formElement.style.border = '1px solid #FFED00';
+          
+          // Clean up highlight after 2 seconds
+          setTimeout(() => {
+            formElement.style.boxShadow = '';
+            formElement.style.border = '';
+          }, 2000);
+        }
+        
+        // Scroll to top of page using header as anchor
+        headerElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start'
+        });
+        
+      } else {
+        console.error('❌ Header not found, scrolling to top');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      
+      showMessage('Konzert-Daten wurden geladen. Bearbeite die Felder und klicke auf "Konzert aktualisieren".', 'success');
+    };
+
+    window.viewConcert = function(id) {
+      console.log('👁️ Viewing concert:', id);
+      
+      // Find the concert in the current list
+      const concerts = window.currentConcerts || [];
+      const concert = concerts.find(c => c._id === id);
+      
+      if (!concert) {
+        showMessage('Konzert nicht gefunden!', 'error');
+        return;
+      }
+      
+      // Open homepage in new tab with specific concert anchor
+      const homepageUrl = `${window.location.origin}/#shows-${id}`;
+      window.open(homepageUrl, '_blank');
+      
+      showMessage('Homepage wird in neuem Tab geöffnet. Das Konzert findest du im Shows-Bereich.', 'success');
+    };
+    
+    // Delete concert function
+    window.deleteConcert = function(id) {
+      console.log('🗑️ Deleting concert:', id);
+      
+      // Find concert data for confirmation
+      const concerts = window.currentConcerts || [];
+      const concert = concerts.find(c => c._id === id);
+      
+      if (!concert) {
+        console.error('❌ Concert not found:', id);
+        showMessage('❌ Konzert nicht gefunden', 'error');
+        return;
+      }
+      
+      // Show beautiful delete modal
+      showDeleteModal(id, concert);
+    };
+    
+    // Beautiful Delete Modal
+    function showDeleteModal(id, concert) {
+      // Modal HTML erstellen
+      const modalHTML = `
+        <div id="deleteModal" class="modal-overlay">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>Konzert löschen</h3>
+            </div>
+            <div class="modal-body">
+              <p><strong>${concert.title}</strong></p>
+              <p>📅 ${formatDate(concert.date)} | 🏢 ${concert.city}</p>
+              <p style="margin-top: 15px; color: #ff4444; font-weight: 600;">Diese Aktion kann nicht rückgängig gemacht werden.</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" onclick="closeDeleteModal()">Abbrechen</button>
+              <button class="btn btn-danger" onclick="confirmDelete('${id}')">Ja, löschen</button>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Modal zum Body hinzufügen
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+      
+      // Event Listener für Modal-Overlay (außerhalb klicken) - direkter Ansatz
+      setTimeout(() => {
+        const modal = document.getElementById('deleteModal');
+        if (modal) {
+          modal.addEventListener('click', function(e) {
+            // Prüfe ob der Klick auf das Overlay selbst war (nicht auf den Content)
+            if (e.target === modal) {
+              closeDeleteModal();
+            }
+          });
+        }
+      }, 100);
+      
+      // Einheitliche Modal-Styles hinzufügen
+      addUnifiedModalStyles();
+    }
+    
+    // Einheitliche Modal-Styles für alle Modals
+    function addUnifiedModalStyles() {
+      if (!document.querySelector('#unifiedModalStyles')) {
+        const styles = document.createElement('style');
+        styles.id = 'unifiedModalStyles';
+        styles.textContent = `
+          /* Einheitliche Modal-Styles für alle Modals */
+          .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: modalFadeIn 0.3s ease;
+          }
+          
+          .modal-content {
+            background: #333333;
+            border: 2px solid #FFED00;
+            border-radius: 0;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
+            max-width: 500px;
+            width: 90%;
+            animation: modalSlideIn 0.3s ease;
+            color: #ffffff;
+            font-family: 'Roboto Mono', monospace;
+            overflow: hidden;
+          }
+          
+          .modal-header {
+            padding: 25px;
+            border-bottom: none;
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
+          }
+          
+          .modal-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #FFED00, #ffd700, #FFED00);
+            animation: shimmer 2s infinite;
+          }
+          
+          .modal-header h3 {
+            margin: 0;
+            color: #FFED00;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+          }
+          
+          .modal-body {
+            padding: 25px;
+            line-height: 1.7;
+            background: rgba(255, 255, 255, 0.02);
+          }
+          
+          .modal-body p {
+            margin: 15px 0;
+            color: #ffffff;
+            font-size: 16px;
+          }
+          
+          .modal-body strong {
+            color: #FFED00;
+            font-weight: 700;
+            text-shadow: 0 0 5px rgba(255, 237, 0, 0.3);
+          }
+          
+          .modal-footer {
+            padding: 25px;
+            border-top: none;
+            background: rgba(255, 255, 255, 0.02);
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            align-items: center;
+          }
+          
+          .modal-footer .btn {
+            min-width: 120px;
+            padding: 12px 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            border: 2px solid transparent;
+            border-radius: 0;
+            margin: 0;
+            font-family: 'Roboto Mono', monospace;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+          }
+          
+          .modal-footer .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            transition: left 0.3s ease;
+            z-index: -1;
+          }
+          
+          .modal-footer .btn:hover {
+            color: #181818;
+            transform: translateY(-2px);
+          }
+          
+          .modal-footer .btn:hover::before {
+            left: 0;
+          }
+          
+          .modal-footer .btn-secondary {
+            border-color: #666;
+            color: #666;
+            background: transparent;
+          }
+          
+          .modal-footer .btn-secondary:hover {
+            color: #ffffff;
+            background: #666;
+          }
+          
+          .modal-footer .btn-secondary::before {
+            background: #666;
+          }
+          
+          .modal-footer .btn-danger {
+            border-color: #ff4444;
+            color: #ffffff;
+            background: #ff4444;
+          }
+          
+          .modal-footer .btn-danger:hover {
+            color: #ffffff;
+            background: #ff3333;
+            border-color: #ff3333;
+          }
+          
+          .modal-footer .btn-danger::before {
+            background: #ff4444;
+          }
+          
+          /* Animations */
+          @keyframes modalFadeIn {
+            from { 
+              opacity: 0;
+              backdrop-filter: blur(0px);
+            }
+            to { 
+              opacity: 1;
+              backdrop-filter: blur(5px);
+            }
+          }
+          
+          @keyframes modalSlideIn {
+            from { 
+              opacity: 0;
+              transform: translateY(-30px) scale(0.95);
+            }
+            to { 
+              opacity: 1;
+              transform: translateY(0) scale(1);
+            }
+          }
+          
+          @keyframes modalFadeOut {
+            from { 
+              opacity: 1;
+              backdrop-filter: blur(5px);
+            }
+            to { 
+              opacity: 0;
+              backdrop-filter: blur(0px);
+            }
+          }
+          
+          @keyframes modalSlideOut {
+            from { 
+              opacity: 1;
+              transform: translateY(0) scale(1);
+            }
+            to { 
+              opacity: 0;
+              transform: translateY(-30px) scale(0.95);
+            }
+          }
+          
+          @keyframes shimmer {
+            0%, 100% { 
+              background-position: -200% 0;
+            }
+            50% { 
+              background-position: 200% 0;
+            }
+          }
+          
+          /* Responsive */
+          @media (max-width: 600px) {
+            .modal-content {
+              width: 95%;
+              margin: 20px;
+            }
+            
+            .modal-header, .modal-body, .modal-footer {
+              padding: 20px;
+            }
+            
+            .modal-footer {
+              flex-direction: column;
+              gap: 10px;
+            }
+            
+            .modal-footer .btn {
+              width: 100%;
+            }
+          }
+        `;
+        document.head.appendChild(styles);
+      }
+    }
+    
+    // Close delete modal
+    function closeDeleteModal() {
+      const modal = document.getElementById('deleteModal');
+      if (modal) {
+        modal.style.animation = 'modalFadeOut 0.3s ease';
+        setTimeout(() => {
+          modal.remove();
+        }, 300);
+      }
+    }
+    
+    // Confirm delete
+    async function confirmDelete(id) {
+      try {
+        console.log('🔄 Sending delete request...');
+        const response = await fetch(`/api/concerts/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.statusMessage || 'Fehler beim Löschen');
+        }
+        
+        const result = await response.json();
+        console.log('✅ Concert deleted successfully:', result);
+        
+        // Close modal
+        closeDeleteModal();
+        
+        // Show success message
+        showMessage('✅ Konzert erfolgreich gelöscht', 'success');
+        
+        // Reload concerts list
+        await loadConcerts();
+        
+      } catch (error) {
+        console.error('❌ Error deleting concert:', error);
+        showMessage(`❌ Fehler beim Löschen: ${error.message}`, 'error');
+        closeDeleteModal();
+      }
+    }
+
+    // Logout function
+    window.logout = function() {
+      showLogoutModal();
+    };
+
+    // Schönes Logout-Modal
+    function showLogoutModal() {
+      // Modal HTML erstellen
+      const modalHTML = `
+        <div id="logoutModal" class="modal-overlay">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3>🚪 Abmelden</h3>
+            </div>
+            <div class="modal-body">
+              <p>Möchtest du dich wirklich ausloggen?</p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" onclick="closeLogoutModal()">Abbrechen</button>
+              <button class="btn btn-danger" onclick="confirmLogout()">Ja, abmelden</button>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Modal zum Body hinzufügen
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+      
+      // Event Listener für Modal-Overlay (außerhalb klicken) - direkter Ansatz
+      setTimeout(() => {
+        const modal = document.getElementById('logoutModal');
+        if (modal) {
+          modal.addEventListener('click', function(e) {
+            // Prüfe ob der Klick auf das Overlay selbst war (nicht auf den Content)
+            if (e.target === modal) {
+              closeLogoutModal();
+            }
+          });
+        }
+      }, 100);
+      
+      // Einheitliche Modal-Styles hinzufügen
+      addUnifiedModalStyles();
+      
+      // Alte Logout-Styles entfernen falls vorhanden
+      const oldStyles = document.querySelector('#logoutModalStyles');
+      if (oldStyles) {
+        oldStyles.remove();
+      }
+      
+      // Fallback für alte Logout-Styles (falls noch nicht ersetzt)
+      if (!document.querySelector('#unifiedModalStyles')) {
+        const styles = document.createElement('style');
+        styles.id = 'logoutModalStyles';
+        styles.textContent = `
+          .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+          }
+          
+          .modal-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+            animation: slideIn 0.3s ease;
+          }
+          
+          .modal-header {
+            padding: 20px 24px 0;
+            border-bottom: 1px solid #e1e5e9;
+          }
+          
+          .modal-header h3 {
+            margin: 0 0 16px 0;
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+          }
+          
+          .modal-body {
+            padding: 20px 24px;
+          }
+          
+          .modal-body p {
+            margin: 0;
+            color: #666;
+            font-size: 16px;
+            line-height: 1.5;
+          }
+          
+          .modal-footer {
+            padding: 16px 24px 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+          }
+          
+          .btn-secondary {
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 1px solid #dee2e6;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+          }
+          
+          /* Hover-Effekte entfernt */
+          
+          .btn-danger {
+            background: #dc3545;
+            color: white;
+            border: 1px solid #dc3545;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+          }
+          
+          /* Hover-Effekte entfernt */
+          
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          
+          @keyframes slideIn {
+            from { 
+              opacity: 0;
+              transform: translateY(-20px) scale(0.95);
+            }
+            to { 
+              opacity: 1;
+              transform: translateY(0) scale(1);
+            }
+          }
+          
+          @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+          }
+        `;
+        document.head.appendChild(styles);
+      }
+    }
+
+    function closeLogoutModal() {
+      const modal = document.getElementById('logoutModal');
+      if (modal) {
+        modal.style.animation = 'modalFadeOut 0.3s ease';
+        setTimeout(() => {
+          modal.remove();
+        }, 300);
+      }
+    }
+
+    function confirmLogout() {
+      closeLogoutModal();
+      
+      // Zeige Loading-Indikator
+      const logoutBtn = document.querySelector('.btn-logout');
+      const originalText = logoutBtn.innerHTML;
+      logoutBtn.innerHTML = '⏳ Logout...';
+      logoutBtn.disabled = true;
+      
+      // Session-basiertes Logout
+      fetch('/api/logout', {
+        method: 'POST',
+        credentials: 'include'
+      }).then(response => {
+        if (response.ok) {
+          showMessage('✅ Erfolgreich ausgeloggt!', 'success');
+          setTimeout(() => {
+            // Zur Login-Seite weiterleiten
+            window.location.href = '/api/admin';
+          }, 1500);
+        } else {
+          throw new Error('Logout fehlgeschlagen');
+        }
+      }).catch(error => {
+        console.error('Logout error:', error);
+        showMessage('⚠️ Logout fehlgeschlagen, aber Session wird trotzdem gelöscht', 'error');
+        // Trotzdem zur Login-Seite weiterleiten
+        setTimeout(() => {
+          window.location.href = '/api/admin';
+        }, 2000);
+      });
+    }
+
+    // ESC-Taste zum Schließen
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeLogoutModal();
+      }
+    });
+
+    // Native Date/Time Input Enhancement
+    function enhanceDateInputs() {
+      const dateInput = document.getElementById('date');
+      const timeInput = document.getElementById('time');
+      
+      // Set minimum date to today
+      const today = new Date().toISOString().split('T')[0];
+      dateInput.min = today;
+      
+      // Set default time to 20:00
+      timeInput.value = '20:00';
+      
+      // Add focus effects
+      [dateInput, timeInput].forEach(input => {
+        input.addEventListener('focus', function() {
+          this.style.borderColor = '#FFED00';
+          this.style.background = 'rgba(255, 237, 0, 0.05)';
+          // this.style.boxShadow = '0 0 20px rgba(255, 237, 0, 0.2)';
+        });
+        
+        input.addEventListener('blur', function() {
+          this.style.borderColor = '#333';
+          this.style.background = 'rgba(255, 255, 255, 0.05)';
+          this.style.boxShadow = 'none';
+        });
+      });
+    }
+
+    // Generiere animierte Pixel
+    function generatePixels() {
+      const pixelGrid = document.querySelector('.pixel-grid')
+      const pixelCount = 300
+      
+      for (let i = 0; i < pixelCount; i++) {
+        const pixel = document.createElement('div')
+        pixel.className = 'pixel'
+        pixel.style.cssText = `
+          left: ${Math.random() * 100}%;
+          top: ${Math.random() * 100}%;
+          animation-delay: ${Math.random() * 8}s;
+          animation-duration: ${6 + Math.random() * 8}s;
+          width: ${2 + Math.random() * 4}px;
+          height: ${2 + Math.random() * 4}px;
+        `
+        pixelGrid.appendChild(pixel)
+      }
+    }
+
+    // Auto-open date/time pickers on click
+    function setupDateTimePickers() {
+      const dateInput = document.getElementById('date');
+      const timeInput = document.getElementById('time');
+      
+      if (dateInput) {
+        dateInput.addEventListener('click', function(e) {
+          console.log('📅 Date picker clicked - opening dropdown');
+          try {
+            if (this.showPicker) {
+              this.showPicker();
+            }
+          } catch (error) {
+            console.log('📅 Native picker not available, using default behavior');
+          }
+        });
+      }
+      
+      if (timeInput) {
+        timeInput.addEventListener('click', function(e) {
+          console.log('⏰ Time picker clicked - opening dropdown');
+          try {
+            if (this.showPicker) {
+              this.showPicker();
+            }
+          } catch (error) {
+            console.log('⏰ Native picker not available, using default behavior');
+          }
+        });
+      }
+    }
+
+    // Load concerts on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🚀 Page loaded, loading concerts...');
+      generatePixels();
+      enhanceDateInputs();
+      setupDateTimePickers();
+      loadConcerts();
+    });
+    
+    // Also try to load concerts immediately if DOM is already ready
+    if (document.readyState === 'loading') {
+      console.log('📄 DOM still loading...');
+    } else {
+      console.log('📄 DOM already ready, loading concerts immediately...');
+      loadConcerts();
+    }
+  </script>
+</body>
+</html>

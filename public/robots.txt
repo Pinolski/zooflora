@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Block admin areas from indexing
+Disallow: /api/
+Disallow: /api/admin
+Disallow: /admin/
+Disallow: /public/admin/
+
+# Block all API endpoints
+Disallow: /api/concerts
+Disallow: /api/login
+Disallow: /api/logout
+Disallow: /api/save-concert
+
+# Block admin interface files
+Disallow: /admin-interface.html
+Disallow: /login.html
+Disallow: /config.yml
+
+Sitemap: https://zooflora.com/sitemap.xml

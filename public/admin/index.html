@@ -1,153 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZooFlora CMS - Konzerte verwalten</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZooFlora Admin - Weiterleitung</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       margin: 0;
-      padding: 20px;
-      background: #f5f5f5;
-      line-height: 1.6;
+      padding: 40px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .container {
-      max-width: 1200px;
-      margin: 0 auto;
       background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 500px;
     }
     h1 {
       color: #333;
-      border-bottom: 3px solid #FFED00;
-      padding-bottom: 10px;
-    }
-    .concert-list {
-      display: grid;
-      gap: 20px;
-      margin-top: 30px;
-    }
-    .concert-item {
-      border: 1px solid #ddd;
-      padding: 20px;
-      border-radius: 8px;
-      background: #fafafa;
-    }
-    .concert-item h3 {
-      margin: 0 0 10px 0;
-      color: #333;
-    }
-    .concert-meta {
-      color: #666;
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
-    .concert-actions {
-      margin-top: 15px;
-    }
-    .btn {
-      display: inline-block;
-      padding: 8px 16px;
-      background: #FFED00;
-      color: #333;
-      text-decoration: none;
-      border-radius: 4px;
-      margin-right: 10px;
-      font-weight: 500;
-      border: none;
-      cursor: pointer;
-    }
-    .btn:hover {
-      background: #e6d600;
-    }
-    .btn-secondary {
-      background: #666;
-      color: white;
-    }
-    .btn-secondary:hover {
-      background: #555;
-    }
-    .btn-success {
-      background: #28a745;
-      color: white;
-    }
-    .btn-success:hover {
-      background: #218838;
-    }
-    .add-concert {
-      margin-top: 30px;
-      padding: 20px;
-      background: #f8f9fa;
-      border-radius: 8px;
-      border: 2px dashed #ddd;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 500;
-    }
-    .form-group input, .form-group textarea {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    .form-group textarea {
-      height: 80px;
-      resize: vertical;
-    }
-    .status-badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 500;
-      margin-left: 10px;
-    }
-    .status-upcoming {
-      background: #d4edda;
-      color: #155724;
-    }
-    .status-past {
-      background: #f8d7da;
-      color: #721c24;
-    }
-    .success-message {
-      background: #d4edda;
-      color: #155724;
-      padding: 15px;
-      border-radius: 4px;
-      margin: 15px 0;
-      border: 1px solid #c3e6cb;
-    }
-    .error-message {
-      background: #f8d7da;
-      color: #721c24;
-      padding: 15px;
-      border-radius: 4px;
-      margin: 15px 0;
-      border: 1px solid #f5c6cb;
+      margin-bottom: 20px;
+      font-size: 28px;
     }
     .loading {
-      display: none;
-      text-align: center;
-      padding: 20px;
+      color: #666;
+      margin: 20px 0;
     }
     .spinner {
       border: 3px solid #f3f3f3;
-      border-top: 3px solid #FFED00;
+      border-top: 3px solid #667eea;
       border-radius: 50%;
       width: 30px;
       height: 30px;
       animation: spin 1s linear infinite;
-      margin: 0 auto 10px;
+      margin: 0 auto 20px;
     }
     @keyframes spin {
       0% { transform: rotate(0deg); }
@@ -157,223 +49,18 @@
 </head>
 <body>
   <div class="container">
-    <h1>🎵 ZooFlora CMS - Konzerte verwalten</h1>
+    <h1>🔐 ZooFlora Admin</h1>
     
-    <div id="messages"></div>
+    <div class="spinner"></div>
+    <div class="loading">Weiterleitung zum Login...</div>
     
-    <div class="add-concert">
-      <h3>Neues Konzert hinzufügen</h3>
-      <div class="success-message">
-        <strong>📋 So funktioniert's:</strong><br>
-        1. Formular ausfüllen und "Konzert automatisch speichern" klicken<br>
-        2. Markdown-Datei wird automatisch heruntergeladen<br>
-        3. Datei in den Ordner <code>content/concerts/</code> speichern<br>
-        4. Konzert erscheint automatisch auf der Website! 🎉
-      </div>
-      <form id="addConcertForm">
-        <div class="form-group">
-          <label for="title">Titel/Venue:</label>
-          <input type="text" id="title" name="title" required>
-        </div>
-        <div class="form-group">
-          <label for="date">Datum:</label>
-          <input type="date" id="date" name="date" required>
-        </div>
-        <div class="form-group">
-          <label for="city">Stadt:</label>
-          <input type="text" id="city" name="city" required>
-        </div>
-        <div class="form-group">
-          <label for="venue">Venue (detailliert):</label>
-          <input type="text" id="venue" name="venue" required>
-        </div>
-        <div class="form-group">
-          <label for="time">Uhrzeit:</label>
-          <input type="text" id="time" name="time" placeholder="z.B. 20:00 Uhr" required>
-        </div>
-        <div class="form-group">
-          <label for="ticket_url">Ticket URL (optional):</label>
-          <input type="url" id="ticket_url" name="ticket_url">
-        </div>
-        <div class="form-group">
-          <label for="photos_url">Fotos URL (optional):</label>
-          <input type="url" id="photos_url" name="photos_url">
-        </div>
-        <div class="form-group">
-          <label for="body">Beschreibung (optional):</label>
-          <textarea id="body" name="body" placeholder="Zusätzliche Informationen zum Konzert..."></textarea>
-        </div>
-        <button type="submit" class="btn btn-success">Konzert automatisch speichern</button>
-      </form>
-      
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <p>Speichere Konzert...</p>
-      </div>
-    </div>
-
-    <div class="concert-list" id="concertList">
-      <h3>📅 Bestehende Konzerte</h3>
-      <div class="concert-item">
-        <h3>Test Venue über den Wolken <span class="status-badge status-upcoming">Kommend</span></h3>
-        <div class="concert-meta">
-          📅 2025-10-29 | 🏢 Köln | ⏰ 20:00 Uhr
-        </div>
-        <div class="concert-actions">
-          <button class="btn btn-secondary" onclick="editConcert('Test Venue über den Wolken')">Bearbeiten</button>
-          <button class="btn" onclick="viewConcert('Test Venue über den Wolken')">Anzeigen</button>
-        </div>
-      </div>
-      
-      <div class="concert-item">
-        <h3>sdcsdcsdc <span class="status-badge status-upcoming">Kommend</span></h3>
-        <div class="concert-meta">
-          📅 2025-10-28 | 🏢 sdsdcsdc | ⏰ 20:00 Uhr
-        </div>
-        <div class="concert-actions">
-          <button class="btn btn-secondary" onclick="editConcert('sdcsdcsdc')">Bearbeiten</button>
-          <button class="btn" onclick="viewConcert('sdcsdcsdc')">Anzeigen</button>
-        </div>
-      </div>
-      
-      <div class="concert-item">
-        <h3>Club Indigo <span class="status-badge status-past">Vergangen</span></h3>
-        <div class="concert-meta">
-          📅 2024-03-15 | 🏢 Berlin | ⏰ 20:00 Uhr
-        </div>
-        <div class="concert-actions">
-          <button class="btn btn-secondary" onclick="editConcert('Club Indigo')">Bearbeiten</button>
-          <button class="btn" onclick="viewConcert('Club Indigo')">Anzeigen</button>
-        </div>
-      </div>
-      
-      <div class="concert-item">
-        <h3>Underground Venue <span class="status-badge status-past">Vergangen</span></h3>
-        <div class="concert-meta">
-          📅 2024-03-22 | 🏢 Hamburg | ⏰ 21:00 Uhr
-        </div>
-        <div class="concert-actions">
-          <button class="btn btn-secondary" onclick="editConcert('Underground Venue')">Bearbeiten</button>
-          <button class="btn" onclick="viewConcert('Underground Venue')">Anzeigen</button>
-        </div>
-      </div>
-      
-      <div class="concert-item">
-        <h3>Post-Punk Festival <span class="status-badge status-past">Vergangen</span></h3>
-        <div class="concert-meta">
-          📅 2024-04-05 | 🏢 München | ⏰ 19:30 Uhr
-        </div>
-        <div class="concert-actions">
-          <button class="btn btn-secondary" onclick="editConcert('Post-Punk Festival')">Bearbeiten</button>
-          <button class="btn" onclick="viewConcert('Post-Punk Festival')">Anzeigen</button>
-        </div>
-      </div>
-    </div>
+    <p>Du wirst automatisch zum Admin-Bereich weitergeleitet.</p>
   </div>
 
   <script>
-    // Helper functions
-    function showMessage(message, type = 'success') {
-      const messagesDiv = document.getElementById('messages');
-      const messageClass = type === 'success' ? 'success-message' : 'error-message';
-      messagesDiv.innerHTML = `<div class="${messageClass}">${message}</div>`;
-      
-      // Auto-hide after 5 seconds
-      setTimeout(() => {
-        messagesDiv.innerHTML = '';
-      }, 5000);
-    }
-
-    function generateSlug(title, date) {
-      const dateStr = date.replace(/-/g, '');
-      const titleSlug = title.toLowerCase()
-        .replace(/[^a-z0-9]/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '');
-      return `${dateStr}-${titleSlug}`;
-    }
-
-    function generateMarkdown(concert) {
-      const frontmatter = `---
-title: ${concert.title}
-date: ${concert.date}
-city: ${concert.city}
-venue: ${concert.venue}
-time: ${concert.time}
-${concert.ticket_url ? `ticket_url: ${concert.ticket_url}` : ''}
-${concert.photos_url ? `photos_url: ${concert.photos_url}` : ''}
-published: true
----
-
-${concert.body || ''}`;
-
-      return frontmatter;
-    }
-
-    function saveConcert(concert) {
-      try {
-        const filename = generateSlug(concert.title, concert.date);
-        const markdown = generateMarkdown(concert);
-        
-        // Create a downloadable file
-        const blob = new Blob([markdown], { type: 'text/markdown' });
-        const url = URL.createObjectURL(blob);
-        
-        // Create download link
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${filename}.md`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        showMessage(`✅ Konzert "${concert.title}" wurde als Datei heruntergeladen!<br><br>📁 Speichere die Datei in: <code>content/concerts/${filename}.md</code><br><br>💡 Nach dem Speichern wird das Konzert automatisch auf der Website angezeigt.`);
-        
-        return true;
-      } catch (error) {
-        console.error('Error saving concert:', error);
-        showMessage(`❌ Fehler beim Erstellen der Datei: ${error.message}`, 'error');
-        return false;
-      }
-    }
-
-    // Form submission
-    document.getElementById('addConcertForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const formData = new FormData(this);
-      const concert = Object.fromEntries(formData.entries());
-      
-      // Show loading
-      document.getElementById('loading').style.display = 'block';
-      this.style.display = 'none';
-      
-      try {
-        const success = saveConcert(concert);
-        
-        if (success) {
-          // Reset form
-          this.reset();
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        showMessage('❌ Unerwarteter Fehler beim Speichern', 'error');
-      } finally {
-        // Hide loading
-        document.getElementById('loading').style.display = 'none';
-        this.style.display = 'block';
-      }
-    });
-
-    // Placeholder functions for concert actions
-    window.editConcert = function(title) {
-      showMessage(`Bearbeitung von "${title}" wird in einer zukünftigen Version verfügbar sein.`, 'error');
-    };
-
-    window.viewConcert = function(title) {
-      showMessage(`Anzeige von "${title}" wird in einer zukünftigen Version verfügbar sein.`, 'error');
-    };
+    // Automatische Weiterleitung zu /api/admin
+    console.log('🔐 Weiterleitung zu /api/admin...');
+    window.location.href = '/api/admin';
   </script>
 </body>
 </html>
