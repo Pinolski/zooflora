@@ -2,9 +2,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@pinia/nuxt', '@nuxtjs/google-fonts', 'nuxt-gtag', '@nuxt/content'],
   content: {
-    // Disable database for now to avoid TTY issues
-    database: false,
-    // Use file-based content instead
+    // Use default file-based content
     sources: {
       content: {
         driver: 'fs',

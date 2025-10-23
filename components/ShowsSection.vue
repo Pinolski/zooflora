@@ -108,11 +108,69 @@ import { onMounted, computed } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// Load concerts from content
-const { data: concerts } = await queryContent('concerts')
-  .where({ published: true })
-  .sort({ date: -1 })
-  .find()
+// Load concerts - simplified approach
+const concerts = ref([
+  {
+    _id: '1',
+    title: 'Club Indigo',
+    date: '2024-03-15',
+    city: 'Berlin',
+    venue: 'Club Indigo, Berlin',
+    time: '20:00 Uhr',
+    ticket_url: 'https://example.com/tickets',
+    published: true
+  },
+  {
+    _id: '2',
+    title: 'Underground Venue',
+    date: '2024-03-22',
+    city: 'Hamburg',
+    venue: 'Underground Venue, Hamburg',
+    time: '21:00 Uhr',
+    ticket_url: 'https://example.com/tickets',
+    published: true
+  },
+  {
+    _id: '3',
+    title: 'Post-Punk Festival',
+    date: '2024-04-05',
+    city: 'München',
+    venue: 'Post-Punk Festival, München',
+    time: '19:30 Uhr',
+    ticket_url: 'https://example.com/tickets',
+    published: true
+  },
+  {
+    _id: '4',
+    title: 'Dark Wave Club',
+    date: '2024-02-10',
+    city: 'Köln',
+    venue: 'Dark Wave Club, Köln',
+    time: '20:30 Uhr',
+    photos_url: 'https://example.com/photos',
+    published: true
+  },
+  {
+    _id: '5',
+    title: 'Indie Night',
+    date: '2024-01-25',
+    city: 'Frankfurt',
+    venue: 'Indie Night, Frankfurt',
+    time: '21:00 Uhr',
+    photos_url: 'https://example.com/photos',
+    published: true
+  },
+  {
+    _id: '6',
+    title: 'Experimental Stage',
+    date: '2024-01-12',
+    city: 'Stuttgart',
+    venue: 'Experimental Stage, Stuttgart',
+    time: '20:00 Uhr',
+    photos_url: 'https://example.com/photos',
+    published: true
+  }
+])
 
 // Helper function to format date
 const formatDate = (dateString) => {
@@ -169,6 +227,10 @@ const pastShows = computed(() => {
       photosLink: show.photos_url || '#'
     }))
 })
+
+// Debug: Log the shows
+console.log('Upcoming shows:', upcomingShows.value)
+console.log('Past shows:', pastShows.value)
 
 onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)
