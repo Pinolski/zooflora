@@ -108,9 +108,18 @@ import { onMounted } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// Static shows data with correct date logic
-const upcomingShows = [
-  // Future concert (2025) - from your content file
+// Static shows data with your new concert
+const upcomingShows = ref([
+  // Your new concert (2025-10-29)
+  {
+    id: '20251029-test-venue-ber-den-wolken',
+    date: { day: '29', month: 'Okt', year: '2025' },
+    venue: 'Test Venue über den Wolken',
+    location: 'Köln, Deutschland',
+    time: '20:00 Uhr',
+    ticketLink: 'https://www.instagram.com/purehonestmusic_/'
+  },
+  // Your other future concert (2025-10-28)
   {
     id: '20251028-sdcsdcsdc',
     date: { day: '28', month: 'Okt', year: '2025' },
@@ -119,9 +128,9 @@ const upcomingShows = [
     time: '20:00 Uhr',
     ticketLink: 'https://www.instagram.com/p/DP_EZSjDK5D/'
   }
-]
+])
 
-const pastShows = [
+const pastShows = ref([
   // Past concerts (2024)
   {
     id: '1',
@@ -171,7 +180,7 @@ const pastShows = [
     time: '20:00 Uhr',
     photosLink: 'https://example.com/photos'
   }
-]
+])
 
 onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)
