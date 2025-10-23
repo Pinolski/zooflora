@@ -19,6 +19,7 @@
   "dependencies": {
     "@nuxtjs/google-fonts": "^3.0.2",
     "@pinia/nuxt": "^0.5.1",
+    "gray-matter": "^4.0.3",
     "gsap": "^3.13.0",
     "nuxt-gtag": "^3.0.0",
     "pinia": "^2.1.7",
