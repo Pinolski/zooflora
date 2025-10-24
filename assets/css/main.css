@@ -19,6 +19,45 @@ body {
   cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="%23FFED00"/></svg>'), auto;
 }
 
+/* Custom Scrollbar - ZooFlora Style */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #FFED00 #181818;
+}
+
+/* Webkit Scrollbar (Chrome, Safari, Edge) */
+*::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #181818;
+  border-radius: 0 !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #FFED00;
+  border: 2px solid #181818;
+  border-radius: 0 !important;
+  box-shadow: none;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #FFD700;
+  border-radius: 0 !important;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: #FFED00;
+  border-radius: 0 !important;
+}
+
+*::-webkit-scrollbar-corner {
+  background: #181818;
+  border-radius: 0 !important;
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Roboto Mono', monospace;
@@ -164,9 +203,18 @@ p {
   color: #181818;
 }
 
+.btn-secondary::before {
+  background: #E6D600;
+}
+
 .btn-secondary:hover {
-  background: transparent;
-  color: #FFED00;
+  background: #E6D600;
+  color: #181818;
+  border-color: #E6D600;
+}
+
+.btn-secondary:hover::before {
+  left: 0;
 }
 
 /* Layout */

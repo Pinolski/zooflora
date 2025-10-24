@@ -43,8 +43,6 @@ const createDots = () => {
       })
     }
   }
-  
-  console.log(`Created ${dots.length} dots for ${cols}x${rows} grid`)
 }
 
 const draw = () => {

@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -164,7 +164,7 @@ const videos = [
   }
 ]
 
-onMounted(() => {
+onMounted(async () => {
   gsap.registerPlugin(ScrollTrigger)
   
   // Check cookie consent on mount
@@ -173,8 +173,13 @@ onMounted(() => {
   // Listen for cookie updates
   window.addEventListener('cookieConsentUpdated', handleCookieUpdate)
   
-  // Stagger animation for video items
-  gsap.fromTo('.video-item', 
+  // Wait for DOM to be ready
+  await nextTick()
+  
+  // Stagger animation for video items (only if elements exist)
+  const videoItems = document.querySelectorAll('.video-item')
+  if (videoItems.length > 0) {
+    gsap.fromTo('.video-item', 
     {
       opacity: 0,
       y: 100,
@@ -195,25 +200,28 @@ onMounted(() => {
       }
     }
   )
+  }
   
   // Hover effects for video items
-  document.querySelectorAll('.video-item').forEach(item => {
-    item.addEventListener('mouseenter', () => {
-      gsap.to(item, {
-        scale: 1.05,
-        duration: 0.3,
-        ease: 'power2.out'
+  if (videoItems.length > 0) {
+    videoItems.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        gsap.to(item, {
+          scale: 1.05,
+          duration: 0.3,
+          ease: 'power2.out'
+        })
+      })
+      
+      item.addEventListener('mouseleave', () => {
+        gsap.to(item, {
+          scale: 1,
+          duration: 0.3,
+          ease: 'power2.out'
+        })
       })
     })
-    
-    item.addEventListener('mouseleave', () => {
-      gsap.to(item, {
-        scale: 1,
-        duration: 0.3,
-        ease: 'power2.out'
-      })
-    })
-  })
+  }
 })
 
 onUnmounted(() => {

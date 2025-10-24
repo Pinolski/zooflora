@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <div class="container">
+    <div class="container footer-container">
       <div class="footer-content">
         <!-- Logo und Beschreibung -->
         <div class="footer-brand">
@@ -72,6 +72,8 @@
   border-top: 1px solid #FFED00;
   padding: 3rem 0 1rem;
   margin-top: 4rem;
+  position: relative;
+  z-index: 10;
 }
 
 .footer-content {
@@ -79,6 +81,8 @@
   grid-template-columns: 1fr 2fr;
   gap: 3rem;
   margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-brand {
@@ -154,10 +158,17 @@
   transform: scale(1.1);
 }
 
+.footer-container {
+  position: relative;
+  z-index: 2;
+}
+
 .footer-bottom {
   border-top: 1px solid #333;
   padding-top: 1.5rem;
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
 .footer-copyright p {
@@ -185,6 +196,21 @@
   
   .social-links {
     justify-content: center;
+  }
+  
+  /* Footer-Spalten auf Tablet und Mobile zentrieren */
+  .footer-column {
+    text-align: center;
+  }
+  
+  .footer-column h4 {
+    text-align: center;
+  }
+  
+  .footer-column ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
 

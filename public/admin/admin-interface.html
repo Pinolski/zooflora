@@ -905,7 +905,7 @@
         <div class="admin-logo">
           <div>
             <div class="admin-logo-text">ZOO/FLORA</div>
-            <div class="admin-logo-subtitle">ADMIN</div>
+            <div class="admin-logo-subtitle">ADMIN-PANEL</div>
           </div>
         </div>
       </h1>
@@ -943,8 +943,8 @@
             <input type="text" id="city" name="city" placeholder="z.B. Berlin" required>
           </div>
           <div class="form-group">
-            <label for="venue">Venue (detailliert):</label>
-            <input type="text" id="venue" name="venue" placeholder="z.B. Club Indigo" required>
+            <label for="venue">Venue (detailliert) (optional):</label>
+            <input type="text" id="venue" name="venue" placeholder="z.B. Club Indigo">
           </div>
         </div>
         
@@ -1010,10 +1010,23 @@
       });
     }
 
-    function getStatusBadge(dateString) {
-      const today = new Date();
+    function getStatusBadge(dateString, timeString) {
+      const now = new Date();
       const concertDate = new Date(dateString);
-      const isUpcoming = concertDate >= today;
+      
+      // If time is provided, combine date and time for accurate comparison
+      if (timeString) {
+        const [hours, minutes] = timeString.split(':');
+        concertDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+      } else {
+        // If no time, set to end of day (23:59:59)
+        concertDate.setHours(23, 59, 59, 999);
+      }
+      
+      // Reset 'now' to start of current minute for fair comparison
+      now.setSeconds(0, 0);
+      
+      const isUpcoming = concertDate >= now;
       
       return isUpcoming 
         ? '<span class="status-badge status-upcoming">Bevorstehend</span>'
@@ -1038,7 +1051,7 @@
           <button class="delete-icon" onclick="deleteConcert('${concert._id}')" title="Konzert löschen">Löschen</button>
           <div class="concert-header">
             <h3>${concert.title}</h3>
-            ${getStatusBadge(concert.date)}
+            ${getStatusBadge(concert.date, concert.time)}
           </div>
           <div class="concert-meta">
             📅 ${formatDate(concert.date)} | 🏢 ${concert.city} | ⏰ ${concert.time || 'TBA'}

@@ -91,9 +91,9 @@ import { ref, onMounted } from 'vue'
 const showBanner = ref(false)
 const showSettings = ref(false)
 const settings = ref({
-  youtube: true,
-  spotify: true,
-  analytics: true
+  youtube: false,
+  spotify: false,
+  analytics: false
 })
 
 const acceptAll = () => {
@@ -131,11 +131,17 @@ const openSettings = () => {
   const consent = localStorage.getItem('cookieConsent')
   if (consent) {
     const savedSettings = JSON.parse(consent)
-    settings.value.youtube = savedSettings.youtube || false
-    settings.value.spotify = savedSettings.spotify || false
-    settings.value.analytics = savedSettings.analytics || false
+    settings.value.youtube = savedSettings.youtube === true
+    settings.value.spotify = savedSettings.spotify === true
+    settings.value.analytics = savedSettings.analytics === true
+  } else {
+    // If no consent exists, reset to defaults (all false)
+    settings.value.youtube = false
+    settings.value.spotify = false
+    settings.value.analytics = false
   }
   showSettings.value = true
+  showBanner.value = false
 }
 
 const closeSettings = () => {
@@ -161,12 +167,10 @@ const saveSettings = () => {
 const initializeServices = (youtube, analytics) => {
   if (youtube) {
     // Initialize YouTube iframe API
-    console.log('YouTube cookies accepted')
   }
   
   if (analytics) {
     // Initialize Matomo Analytics
-    console.log('Analytics cookies accepted')
     // Add your Matomo tracking code here
   }
 }
@@ -181,17 +185,23 @@ onMounted(() => {
       showBanner.value = true
     }, 2000)
   } else {
-    // Load saved preferences
+    // Load saved preferences - use strict boolean checks
     const savedSettings = JSON.parse(consent)
-    settings.value.youtube = savedSettings.youtube || false
-    settings.value.spotify = savedSettings.spotify || false
-    settings.value.analytics = savedSettings.analytics || false
-    initializeServices(savedSettings.youtube, savedSettings.analytics)
+    settings.value.youtube = savedSettings.youtube === true
+    settings.value.spotify = savedSettings.spotify === true
+    settings.value.analytics = savedSettings.analytics === true
+    initializeServices(savedSettings.youtube === true, savedSettings.analytics === true)
   }
   
   // Listen for external requests to open cookie settings
   window.addEventListener('openCookieSettings', () => {
-    showBanner.value = true
+    const consent = localStorage.getItem('cookieConsent')
+    if (consent) {
+      const savedSettings = JSON.parse(consent)
+      settings.value.youtube = savedSettings.youtube === true
+      settings.value.spotify = savedSettings.spotify === true
+      settings.value.analytics = savedSettings.analytics === true
+    }
     showSettings.value = true
   })
 })

@@ -116,19 +116,15 @@ const concerts = ref([])
 // Load concerts on component mount
 onMounted(async () => {
   try {
-    console.log('🔄 Loading concerts from API...')
     // Load from API
     const response = await fetch('/api/concerts')
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
     const result = await response.json()
-    console.log('🎵 Loaded concerts from API:', result)
-    console.log('🎵 Number of concerts:', result.length)
     concerts.value = result
-    console.log('🎵 Concerts ref updated:', concerts.value)
   } catch (error) {
-    console.error('❌ Error loading concerts from API:', error)
+    console.error('Error loading concerts:', error)
     // Keep empty array as fallback
     concerts.value = []
   }
@@ -205,7 +201,6 @@ onMounted(async () => {
   const hash = window.location.hash
   if (hash && hash.startsWith('#shows-')) {
     const concertId = hash.replace('#shows-', '')
-    console.log('🎯 Scrolling to concert:', concertId)
     
     // Wait for DOM to be ready and then scroll
     setTimeout(() => {
@@ -215,9 +210,6 @@ onMounted(async () => {
           behavior: 'smooth', 
           block: 'center' 
         })
-        console.log('✅ Scrolled to concert:', concertId)
-      } else {
-        console.log('❌ Concert element not found:', concertId)
       }
     }, 1000) // Wait for GSAP animations to complete
   }
@@ -309,7 +301,6 @@ const upcomingShows = computed(() => {
       ticketLink: show.ticket_url || '#'
     }))
   
-  console.log('🎵 Upcoming shows computed (sorted by date):', filtered)
   return filtered
 })
 
@@ -331,13 +322,8 @@ const pastShows = computed(() => {
       photosLink: show.photos_url || '#'
     }))
   
-  console.log('🎵 Past shows computed:', filtered)
   return filtered
 })
-
-// Debug logging
-console.log('🎵 Upcoming shows:', upcomingShows.value)
-console.log('🎵 Past shows:', pastShows.value)
 </script>
 
 <style scoped>

@@ -25,6 +25,20 @@
       <!-- Contact Section -->
       <ContactSection />
       
+      <!-- Circular Text (zwischen Contact und Footer) -->
+          <div class="circular-text-standalone">
+            <CircularText
+              text="&nbsp;ZOO/FLORA&nbsp;"
+              separator="&nbsp;* KÖLN * SINCE 2024 * "
+              :spin-duration="20"
+          on-hover="speedUp"
+          class-name="circular-text-custom"
+          :size="600"
+          :font-size="42"
+          :font-weight="900"
+        />
+      </div>
+      
       <!-- Footer -->
       <FooterSection />
     </div>
@@ -38,6 +52,7 @@
 import { ref, onMounted } from 'vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import CircularText from '~/components/CircularText.vue'
 
 // Meta tags
 useHead({
@@ -193,6 +208,7 @@ const initializePageTransitions = () => {
 .main-content {
   opacity: 1;
   transition: opacity 0.3s ease;
+  position: relative;
 }
 
 /* Global scroll behavior */
@@ -227,5 +243,51 @@ html {
 ::-moz-selection {
   background: #FFED00;
   color: #181818;
+}
+
+/* Circular Text Standalone */
+.circular-text-standalone {
+  position: absolute;
+  bottom: 20px;
+  left: -200px;
+  z-index: 0;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+.circular-text-standalone:hover {
+  opacity: 0.8;
+}
+
+/* Mobile Anpassungen */
+@media (max-width: 768px) and (min-width: 481px) {
+  .circular-text-standalone {
+    left: -124px;
+    bottom: 428px;
+    transform: scale(0.5);
+    transform-origin: left bottom;
+  }
+}
+
+@media (max-width: 480px) {
+  .circular-text-standalone {
+    left: 16px;
+    bottom: 280px;
+    transform: scale(0.6);
+    transform-origin: left bottom;
+  }
+}
+
+:deep(.circular-text-custom) {
+  color: #ffffff !important;
+}
+
+:deep(.circular-text-custom svg) {
+  color: #ffffff !important;
+}
+
+:deep(.circular-text-custom text) {
+  color: #ffffff !important;
+  fill: #ffffff !important;
 }
 </style>

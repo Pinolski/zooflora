@@ -49,7 +49,7 @@
               <h4>Booking</h4>
               <p>Interessiert an einem Auftritt?</p>
               <span class="contact-link">
-                booking@zooflora.de
+                Jetzt Anfragen
               </span>
             </a>
             
@@ -60,24 +60,24 @@
                   <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
                 </svg>
               </div>
-              <h4>Press</h4>
-              <p>Presseanfragen und Interviews</p>
+              <h4>Press-Kit</h4>
+              <p>Pressefotos und Pressetexte</p>
               <span class="contact-link">
-                press@zooflora.de
+                JETZT HERUNTERLADEN
               </span>
             </a>
             
-            <!-- General -->
+            <!-- Tech Rider -->
             <a href="mailto:info@zooflora.de" class="contact-card general">
               <div class="contact-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                  <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
                 </svg>
               </div>
-              <h4>Allgemein</h4>
-              <p>Fragen und Feedback</p>
+              <h4>Stage-Rider</h4>
+              <p>Technische Anforderungen für unseren Gig</p>
               <span class="contact-link">
-                info@zooflora.de
+               JETZT HERUNTERLADEN
               </span>
             </a>
           </div>
@@ -391,6 +391,8 @@ onMounted(() => {
 
 .social-media {
   text-align: center;
+  position: relative;
+  z-index: 20;
 }
 
 .social-media h3 {
@@ -449,6 +451,11 @@ onMounted(() => {
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+  }
+  
+  .social-media {
+    position: relative;
+    z-index: 20;
   }
   
   .social-links {

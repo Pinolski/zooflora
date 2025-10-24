@@ -9,10 +9,10 @@ export default defineEventHandler(async (event) => {
     console.log('🔄 Updating concert:', concertId, body)
     
     // Validierung der erforderlichen Felder
-    if (!body.title || !body.date || !body.city || !body.venue) {
+    if (!body.title || !body.date || !body.city) {
       throw createError({
         statusCode: 400,
-        statusMessage: 'Titel, Datum, Stadt und Venue sind erforderlich'
+        statusMessage: 'Titel, Datum und Stadt sind erforderlich'
       })
     }
     
@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
 title: ${body.title}
 date: ${body.date}
 city: ${body.city}
-venue: ${body.venue}
+${body.venue ? `venue: ${body.venue}` : ''}
 time: ${body.time || ''}
 ${body.ticket_url ? `ticket_url: ${body.ticket_url}` : ''}
 ${body.photos_url ? `photos_url: ${body.photos_url}` : ''}
