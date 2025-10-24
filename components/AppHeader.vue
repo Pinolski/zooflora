@@ -11,6 +11,11 @@
 
             <!-- Desktop Navigation -->
             <ul class="nav-menu" :class="{ 'nav-menu-open': isMenuOpen }">
+              <!-- Mobile Avatar -->
+              <div class="mobile-avatar">
+                <img src="/zooflora-band.jpg" alt="Zoo/Flora Band" class="avatar-image" />
+              </div>
+              
               <li><a href="#videos" @click="closeMenu" class="nav-link">Videos</a></li>
               <li><a href="#artist" @click="closeMenu" class="nav-link">Artist</a></li>
               <li><a href="#shows" @click="closeMenu" class="nav-link">Shows</a></li>
@@ -131,6 +136,26 @@ const toggleMenu = async () => {
     const menuItems = document.querySelectorAll('.nav-menu li')
     
     if (isMenuOpen.value) {
+      // Avatar einblenden
+      const avatar = document.querySelector('.mobile-avatar')
+      if (avatar) {
+        $gsap.fromTo(avatar, 
+          {
+            scale: 0,
+            opacity: 0,
+            y: -30
+          },
+          {
+            scale: 1,
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            delay: 0.2,
+            ease: "back.out(1.7)"
+          }
+        )
+      }
+      
       // Menü öffnen - Animation von links nach rechts
       $gsap.fromTo(menuItems, 
         {
@@ -185,6 +210,18 @@ const toggleMenu = async () => {
         )
       }
     } else {
+      // Avatar ausblenden
+      const avatar = document.querySelector('.mobile-avatar')
+      if (avatar) {
+        $gsap.to(avatar, {
+          scale: 0,
+          opacity: 0,
+          y: -30,
+          duration: 0.3,
+          ease: "power2.in"
+        })
+      }
+      
       // Menü schließen - Animation nach links
       $gsap.to(menuItems, {
         x: -100,
@@ -228,6 +265,18 @@ const closeMenu = () => {
     isMenuOpen.value = false
     
     nextTick(() => {
+      // Avatar ausblenden
+      const avatar = document.querySelector('.mobile-avatar')
+      if (avatar) {
+        $gsap.to(avatar, {
+          scale: 0,
+          opacity: 0,
+          y: -30,
+          duration: 0.3,
+          ease: "power2.in"
+        })
+      }
+      
       const menuItems = document.querySelectorAll('.nav-menu li')
       $gsap.to(menuItems, {
         x: -100,
@@ -508,6 +557,25 @@ onUnmounted(() => {
     margin: 1rem 0;
   }
   
+  .mobile-avatar {
+    display: block;
+    position: absolute;
+    top: 4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    z-index: 1000;
+    margin-bottom: 3rem;
+  }
+  
+  .avatar-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #FFED00;
+  }
+  
   .mobile-social-icons {
     display: flex;
     position: absolute;
@@ -561,6 +629,10 @@ onUnmounted(() => {
   }
   
   .mobile-social-icons {
+    display: none !important;
+  }
+  
+  .mobile-avatar {
     display: none !important;
   }
   

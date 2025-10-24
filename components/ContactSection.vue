@@ -54,7 +54,7 @@
             </a>
             
             <!-- Press -->
-            <a href="mailto:press@zooflora.de" class="contact-card press">
+            <a href="/downloads/ZooFlora-Press-Kit.pdf" @click.prevent="downloadFile('/downloads/ZooFlora-Press-Kit.pdf', 'ZooFlora-Press-Kit.pdf')" class="contact-card press">
               <div class="contact-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
@@ -68,7 +68,7 @@
             </a>
             
             <!-- Tech Rider -->
-            <a href="mailto:info@zooflora.de" class="contact-card general">
+            <a href="/downloads/ZooFlora-Stage-Rider.pdf" @click.prevent="downloadFile('/downloads/ZooFlora-Stage-Rider.pdf', 'ZooFlora-Stage-Rider.pdf')" class="contact-card general">
               <div class="contact-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
@@ -135,6 +135,17 @@ const subscribeNewsletter = async () => {
   } finally {
     isSubmitting.value = false
   }
+}
+
+const downloadFile = (url, filename) => {
+  // Create a temporary link element and trigger download
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  link.style.display = 'none'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
 onMounted(() => {

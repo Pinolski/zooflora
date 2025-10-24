@@ -26,11 +26,11 @@
       <ContactSection />
       
       <!-- Circular Text (zwischen Contact und Footer) -->
-          <div class="circular-text-standalone">
-            <CircularText
-              text="&nbsp;ZOO/FLORA&nbsp;"
-              separator="&nbsp;* KÖLN * SINCE 2024 * "
-              :spin-duration="20"
+      <div class="circular-text-standalone">
+        <CircularText
+          text="&nbsp;ZOO/FLORA&nbsp;"
+          separator="&nbsp;* KÖLN * SINCE 2024 * "
+          :spin-duration="20"
           on-hover="speedUp"
           class-name="circular-text-custom"
           :size="600"

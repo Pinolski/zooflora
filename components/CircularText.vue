@@ -94,8 +94,8 @@ const circumference = computed(() => 2 * Math.PI * r.value)
  * - xml:space=\"preserve\" im <text> verhindert Whitespace-Kollaps.
  */
 const repeatedText = computed(() => {
-  const base = (props.text || '').trim()
-  if (!base) return ''
+  const base = props.text || ''
+  if (!base.trim()) return ''
   const sep = props.separator ?? ' '
   const approxGlyphPx = props.fontSize * 0.58
   const needChars = Math.max(1, Math.ceil(circumference.value / approxGlyphPx))
