@@ -134,9 +134,7 @@ Aktualisiere die Links in den Komponenten:
 - `components/AppHeader.vue`
 - `components/ContactSection.vue`
 
-## 📄 Lizenz
 
-© 2024 Zoo/Flora. Alle Rechte vorbehalten.
 
 ## 🤝 Support
 
